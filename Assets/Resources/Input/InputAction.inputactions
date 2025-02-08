@@ -1,0 +1,76 @@
+{
+    "name": "InputAction",
+    "maps": [
+        {
+            "name": "Input",
+            "id": "5121fd3c-f943-4114-b711-5a35ab2644e8",
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Value",
+                    "id": "df0908ac-f0d4-41fd-b399-146c4b8512fc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Hand",
+                    "type": "Value",
+                    "id": "bcc7dc54-b284-42d9-a6e3-25f8eb020e28",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "dd0c8cd1-151b-456f-84c9-30bf2ffaa55c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "59bb96d5-af1b-415e-9d27-c6f50a8f0474",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "952d477d-6210-499b-a8e1-9585a7001a00",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "feb354b2-bbd6-458b-b5c7-cd6a5bb180fe",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hand",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
