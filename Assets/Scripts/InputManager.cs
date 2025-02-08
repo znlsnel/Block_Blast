@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
 	public InputActionReference clickAction;
 	public InputActionReference handAction;
 
+	GameObject block = null;
 	void Start()
 	{
 		actionAsset.Enable();
@@ -34,6 +35,8 @@ public class InputManager : MonoBehaviour
 		if (hit.collider != null) // 오브젝트가 감지된 경우
 		{
 			Debug.Log("Clicked Object: " + hit.collider.gameObject.name);
+			block = hit.collider.gameObject;
+			block.GetComponent<Block>().OnDragMode();
 		}
 
 	}
@@ -41,8 +44,13 @@ public class InputManager : MonoBehaviour
 	{
 		//bool click = obj.ReadValue<float>() > 0;
 		//if (click)  
-	//	Debug.Log("릴리즈");
-
+		//	Debug.Log("릴리즈");
+		if (block != null)
+		{
+			block.GetComponent<Block>().InitBlock();
+			block = null;
+		}
+		
 
 	}
 	
@@ -51,6 +59,12 @@ public class InputManager : MonoBehaviour
 	void MoveHandPos(InputAction.CallbackContext obj) // Action이 실행될 때
 	{ 
 	//	Debug.Log(obj.ReadValue<Vector2>());
+		if (block != null)
+		{
+			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			pos.z = 0;
+			block.transform.position = pos;
+		}
 	}
 
 

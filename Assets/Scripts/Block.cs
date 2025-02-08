@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -9,12 +10,12 @@ public class Block : MonoBehaviour
 	[SerializeField] GameObject blockPiece;
 
 	Vector3 origin;
-
+	float originSize;
 	private void Start()
 	{
 		SetRotation();
 		origin = transform.position;
-
+		originSize = transform.localScale.x;
 	}
 
 
@@ -27,7 +28,31 @@ public class Block : MonoBehaviour
 
 	public void InitBlock()
 	{
-		
+		transform.position = origin;
+		StartCoroutine(ResizeBlock(originSize, 0.1f));   
+	} 
+
+	public void OnDragMode()
+	{
+		StartCoroutine(ResizeBlock(Board.instance.GetTileSize(), 0.2f));
+	}
+
+	IEnumerator ResizeBlock(float size, float time)
+	{
+	// 블록의 Transform 가져오기
+		Vector3 startScale = transform.localScale; // 현재 크기 저장
+		Vector3 targetScale = new Vector3(size, size, size); // 목표 크기 설정
+		float elapsedTime = 0f;
+
+		while (elapsedTime < time)
+		{
+			elapsedTime += Time.deltaTime;
+			float t = elapsedTime / time;
+			transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+			yield return null; // 다음 프레임까지 대기
+		} 
+
+		transform.localScale = targetScale; // 정확한 크기로 설정
 	}
 
 }

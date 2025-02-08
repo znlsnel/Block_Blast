@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-        public static Board board;
+        public static Board instance;
         [SerializeField] GameObject tile;
         [SerializeField] float length = 4.1f;
         [SerializeField] int tileSize = 8;
@@ -12,7 +12,7 @@ public class Board : MonoBehaviour
         public float GetTileSize() => length / tileSize;
 	private void Awake()
 	{
-                board = this;
+                instance = this;
 	}
 
 	void Start()
