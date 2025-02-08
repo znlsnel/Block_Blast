@@ -24,17 +24,24 @@ public class InputManager : MonoBehaviour
 
 	void ClickScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
-		//bool click = obj.ReadValue<float>() > 0;
-		//if (click)  
-			Debug.Log("프레스");
 
+		//Debug.Log("프레스");
+		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+		// Raycast로 오브젝트 감지
+		RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+		if (hit.collider != null) // 오브젝트가 감지된 경우
+		{
+			Debug.Log("Clicked Object: " + hit.collider.gameObject.name);
+		}
 
 	}
 	void RelaseScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
 		//bool click = obj.ReadValue<float>() > 0;
 		//if (click)  
-		Debug.Log("릴리즈");
+	//	Debug.Log("릴리즈");
 
 
 	}
@@ -43,7 +50,6 @@ public class InputManager : MonoBehaviour
 
 	void MoveHandPos(InputAction.CallbackContext obj) // Action이 실행될 때
 	{ 
-
 	//	Debug.Log(obj.ReadValue<Vector2>());
 	}
 

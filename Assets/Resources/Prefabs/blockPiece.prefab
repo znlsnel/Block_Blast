@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2066559703768730650}
   - component: {fileID: 6204834820668737956}
+  - component: {fileID: 8513664483380760475}
   m_Layer: 0
   m_Name: blockPiece
   m_TagString: Untagged
@@ -52,7 +53,7 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -87,3 +88,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8513664483380760475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964133944502362491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e4fbbe6fa7e74d419458dc0e2708245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
