@@ -4,11 +4,18 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+        public static Board board;
         [SerializeField] GameObject tile;
         [SerializeField] float length = 4.1f;
         [SerializeField] int tileSize = 8;
-        
-        void Start()
+
+        public float GetTileSize() => length / tileSize;
+	private void Awake()
+	{
+                board = this;
+	}
+
+	void Start()
         {
                 SetTiles();
 
