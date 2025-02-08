@@ -148,9 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97451a50d326656479acf9de25c98fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionAsset: {fileID: 0}
-  clickAction: {fileID: 0}
-  handAction: {fileID: 0}
+  actionAsset: {fileID: -944628639613478452, guid: 135eb3e2795a5d64bac3cae8acffb3fb, type: 3}
+  clickAction: {fileID: -5128449048743226263, guid: 135eb3e2795a5d64bac3cae8acffb3fb, type: 3}
+  handAction: {fileID: 6270217687011270892, guid: 135eb3e2795a5d64bac3cae8acffb3fb, type: 3}
 --- !u!4 &246171319
 Transform:
   m_ObjectHideFlags: 0
