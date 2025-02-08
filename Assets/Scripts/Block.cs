@@ -9,29 +9,16 @@ public class Block : MonoBehaviour
 
 	private void Start()
 	{
+		SetRotation();
+
 
 	}
 
 
-	public void CreateBlock(float size)
+	public void SetRotation()
 	{
-		int[][] shape = new int[2][];
-		
-		// 위로 90도 아래로 90도, 180도 회전
-		
-		for (int i = 0; i < shape.Length; i++)
-		{
-			for (int j = 0; j < shape[i].Length; j++)
-			{
-				if (shape[i][j] == 0)
-					continue;
+		transform.rotation = Quaternion.Euler(0f, 0f, 90f);
 
-				var go = Instantiate<GameObject>(blockPiece);
-				go.transform.position = transform.position + new Vector3(size * j, size * i, 0);
-				go.transform.localScale = new Vector3(size, size, size);
-				go.transform.SetParent(transform, false);
-			}
-		}
 	}
 
 

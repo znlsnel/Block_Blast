@@ -1,5 +1,39 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &35519453362044358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1575826556443328155}
+  m_Layer: 0
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1575826556443328155
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35519453362044358}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 120425927997523571}
+  - {fileID: 130151715899255161}
+  - {fileID: 2483753451552881138}
+  m_Father: {fileID: 6740960443195978496}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8054391776587491760
 GameObject:
   m_ObjectHideFlags: 0
@@ -30,9 +64,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 120425927997523571}
-  - {fileID: 130151715899255161}
-  - {fileID: 2483753451552881138}
+  - {fileID: 1575826556443328155}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &949240046483854967
@@ -54,7 +86,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6740960443195978496}
+    m_TransformParent: {fileID: 1575826556443328155}
     m_Modifications:
     - target: {fileID: 2066559703768730650, guid: 7f92740c76440114d82a3490c744925a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -116,7 +148,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6740960443195978496}
+    m_TransformParent: {fileID: 1575826556443328155}
     m_Modifications:
     - target: {fileID: 2066559703768730650, guid: 7f92740c76440114d82a3490c744925a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -178,7 +210,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6740960443195978496}
+    m_TransformParent: {fileID: 1575826556443328155}
     m_Modifications:
     - target: {fileID: 2066559703768730650, guid: 7f92740c76440114d82a3490c744925a, type: 3}
       propertyPath: m_LocalPosition.x

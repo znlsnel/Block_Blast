@@ -490,7 +490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tile: {fileID: 3964133944502362491, guid: 4e0f7d7273b38684f9ec25349f1a1829, type: 3}
   length: 4.1
-  tileSize: 20
+  tileSize: 8
 --- !u!1 &1250559360
 GameObject:
   m_ObjectHideFlags: 0
