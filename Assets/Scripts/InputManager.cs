@@ -42,10 +42,8 @@ public class InputManager : MonoBehaviour
 	{
 		
 		if (block != null && Board.instance.PutBlock(block) == false)
-		{
-			block.InitBlock();
-			
-		}
+			block.OnPlayerDeck();
+		 
 		block = null;
 
 	}

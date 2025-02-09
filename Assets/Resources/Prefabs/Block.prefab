@@ -82,6 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockPiece: {fileID: 3964133944502362491, guid: 7f92740c76440114d82a3490c744925a, type: 3}
+  pieces: []
 --- !u!61 &1909285487658106441
 BoxCollider2D:
   m_ObjectHideFlags: 0

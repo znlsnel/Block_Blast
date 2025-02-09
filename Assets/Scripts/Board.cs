@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEditor.PlayerSettings;
 
 public class Board : MonoBehaviour
@@ -21,12 +22,17 @@ public class Board : MonoBehaviour
         bool[,] visited;
 	GameObject[,] blockPieces;
 
+	int[] bingoY;
+	int[] bingoX;
+
         public float GetTileSize() => length / tileSize;
 	private void Awake()
 	{
                 gameBoard = new Vector3[tileSize, tileSize];
 		visited = new bool[tileSize, tileSize];
 		blockPieces = new GameObject[tileSize, tileSize];
+		bingoY = new int[tileSize];
+		bingoX = new int[tileSize];
 
 		instance = this;
 	}
@@ -65,6 +71,7 @@ public class Board : MonoBehaviour
 
 				blockPieces[i, j] = go2;
 				blockPieces[i, j].SetActive(false);
+				
 			}
 		}
         }
@@ -72,7 +79,7 @@ public class Board : MonoBehaviour
 	public bool PutBlock(Block block)
 	{
 		HashSet<(int, int)> hash = new HashSet<(int, int)> ();
-		foreach (BlockPiece piece in block.pieces)
+		foreach (GameObject piece in block.pieces)
 		{
 			GetClosestTile(piece.transform.position, out int y, out int x);
 			if (y == -1 || x == -1)
@@ -90,14 +97,51 @@ public class Board : MonoBehaviour
 			{
 				int y = pos.Item1;
 				int x = pos.Item2;
+
 				blockPieces[y, x].SetActive(true);
+				blockPieces[y, x].GetComponent<SpriteRenderer>().color = block.blockColor;
+
 				visited[y, x] = true;
+
+				++bingoY[x];
+				++bingoX[y];
+
+				CheckLine(y, x);
 			}
 			PlayerDeck.instance.UseBlock();
 		}
 
 		return ret;
 	}
+
+	void CheckLine(int y, int x)
+	{
+		bool successY = bingoY[x] == tileSize;
+		bool successX = bingoX[y] == tileSize;
+
+		if (successY)
+		{
+			for (int i = 0; i < blockPieces.GetLength(0); i++)
+			{
+				blockPieces[i, x].SetActive(false);
+				visited[i, x] = false;
+				--bingoX[i];
+			}
+			bingoY[x] = 0;
+		}
+
+		if (successX)
+		{
+			for (int i = 0; i < blockPieces.GetLength(1); i++)
+			{
+				blockPieces[y, i].SetActive(false);
+				visited[y, i] = false;
+				--bingoY[i];
+			}
+			bingoX[y] = 0;
+		}
+	}
+
 	void GetClosestTile(Vector3 pos, out int y, out int x)
 	{
 		int rows = gameBoard.GetLength(0);

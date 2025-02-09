@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -11,15 +13,38 @@ public class Block : MonoBehaviour
 
 	Vector3 origin;
 	float originSize;
-	public List<BlockPiece> pieces = new List<BlockPiece>();
+	[NonSerialized] public List<GameObject> pieces = new List<GameObject>();
+	public UnityEngine.Color blockColor;
+
+	private void Awake()
+	{
+		Transform center = transform.GetChild(0);
+		int childCnt = center.childCount;
+		for (int i = 0; i < childCnt; i++)
+		{
+			GameObject go = center.GetChild(i).gameObject;
+			pieces.Add(go);
+			go.GetComponent<SpriteRenderer>().sortingOrder++;
+		}
+		blockColor = GameManager.instance.GetColor();
+	}
 
 	private void Start()
 	{
 		SetRotation();
 		origin = transform.position;
 		originSize = transform.localScale.x;
+		SetColor();
 	}
 
+	public void SetColor()
+	{
+		
+		foreach (GameObject piece in pieces)
+			piece.GetComponent<SpriteRenderer>().color = blockColor;
+		
+
+	}
 
 	public void SetRotation()
 	{
@@ -28,7 +53,9 @@ public class Block : MonoBehaviour
 		transform.rotation = Quaternion.Euler(0f, 0f, rot);
 	}
 
-	public void InitBlock()
+
+
+	public void OnPlayerDeck()
 	{
 		transform.position = origin;
 		StartCoroutine(ResizeBlock(originSize, 0.1f));   
