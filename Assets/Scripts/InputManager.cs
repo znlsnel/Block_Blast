@@ -12,7 +12,8 @@ public class InputManager : MonoBehaviour
 	public InputActionReference clickAction;
 	public InputActionReference handAction;
 
-	GameObject block = null;
+	Block block = null;
+	Vector3 handPos;
 	void Start()
 	{
 		actionAsset.Enable();
@@ -26,42 +27,37 @@ public class InputManager : MonoBehaviour
 	void ClickScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
 
-		//Debug.Log("프레스");
 		Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-		// Raycast로 오브젝트 감지
 		RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
-		if (hit.collider != null) // 오브젝트가 감지된 경우
+		if (hit.collider != null && hit.collider.GetComponent<Block>() != null) // 오브젝트가 감지된 경우
 		{
 			Debug.Log("Clicked Object: " + hit.collider.gameObject.name);
-			block = hit.collider.gameObject;
-			block.GetComponent<Block>().OnDragMode();
+			block = hit.collider.GetComponent<Block>();
+			block.OnDragMode();
 		}
 
 	}
 	void RelaseScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
-		//bool click = obj.ReadValue<float>() > 0;
-		//if (click)  
-		//	Debug.Log("릴리즈");
-		if (block != null)
-		{
-			block.GetComponent<Block>().InitBlock();
-			block = null;
-		}
 		
+		if (block != null && Board.instance.PutBlock(block) == false)
+		{
+			block.InitBlock();
+			
+		}
+		block = null;
 
 	}
 	
 
 
 	void MoveHandPos(InputAction.CallbackContext obj) // Action이 실행될 때
-	{ 
-	//	Debug.Log(obj.ReadValue<Vector2>());
+	{
+		handPos = Camera.main.ScreenToWorldPoint(obj.ReadValue<Vector2>());
 		if (block != null)
 		{
-			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Vector3 pos = handPos;
 			pos.z = 0;
 			block.transform.position = pos;
 		}

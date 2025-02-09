@@ -44,7 +44,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6740960443195978496}
   - component: {fileID: 949240046483854967}
-  - component: {fileID: 1064469242892857454}
+  - component: {fileID: -8660976636020327942}
   m_Layer: 0
   m_Name: Block 3
   m_TagString: Untagged
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockPiece: {fileID: 3964133944502362491, guid: 7f92740c76440114d82a3490c744925a, type: 3}
---- !u!61 &1064469242892857454
+--- !u!61 &-8660976636020327942
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

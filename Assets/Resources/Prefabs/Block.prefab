@@ -45,7 +45,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6740960443195978496}
   - component: {fileID: 949240046483854967}
-  - component: {fileID: 1025472112995935964}
+  - component: {fileID: 1909285487658106441}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockPiece: {fileID: 3964133944502362491, guid: 7f92740c76440114d82a3490c744925a, type: 3}
---- !u!61 &1025472112995935964
+--- !u!61 &1909285487658106441
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,7 +126,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4, y: 1}
+  m_Size: {x: 3.5, y: 1}
   m_EdgeRadius: 0
 --- !u!1001 &2091415872237177449
 PrefabInstance:

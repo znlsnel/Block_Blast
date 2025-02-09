@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
 
 	Vector3 origin;
 	float originSize;
+	public List<BlockPiece> pieces = new List<BlockPiece>();
+
 	private void Start()
 	{
 		SetRotation();

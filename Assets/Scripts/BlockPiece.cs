@@ -10,11 +10,15 @@ public class BlockPiece : MonoBehaviour
     {
                 Transform p = gameObject.transform.parent;
 
+                if (p == null)
+                        return;
+
                 while (p.parent != null)
                         p = p.parent;
 
 		if (p != null)
 			parent = p.GetComponent<Block>();
+                parent?.pieces.Add(this);
 	}
 
 
