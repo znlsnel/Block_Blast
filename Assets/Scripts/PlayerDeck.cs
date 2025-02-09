@@ -48,7 +48,8 @@ public class PlayerDeck : MonoBehaviour
 	{
 		foreach (Vector3 pos in points)
 		{
-			var go = Instantiate(blocks[UnityEngine.Random.Range(0, blocks.Count)]);
+			//var go = Instantiate(blocks[UnityEngine.Random.Range(0, blocks.Count)]);
+			var go = Instantiate(blocks[1]);
 			go.transform.position = pos;
 			go.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
 		}

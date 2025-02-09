@@ -113,7 +113,7 @@ public class Board : MonoBehaviour
 
 		return ret;
 	}
-
+	
 	void CheckLine(int y, int x)
 	{
 		bool successY = bingoY[x] == tileSize;
@@ -125,7 +125,7 @@ public class Board : MonoBehaviour
 			{
 				blockPieces[i, x].SetActive(false);
 				visited[i, x] = false;
-				--bingoX[i];
+				bingoX[i] = Math.Max(0, bingoX[i]-1);
 			}
 			bingoY[x] = 0;
 		}
@@ -136,7 +136,8 @@ public class Board : MonoBehaviour
 			{
 				blockPieces[y, i].SetActive(false);
 				visited[y, i] = false;
-				--bingoY[i];
+				bingoY[i] = Math.Max(0, bingoY[i]-1);
+
 			}
 			bingoX[y] = 0;
 		}
