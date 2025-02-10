@@ -3,34 +3,38 @@ using NUnit.Framework.Internal;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using Unity.Notifications.iOS;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEditor.PlayerSettings;
 
 public class Board : MonoBehaviour
 {
-        public static Board instance;
+	public static Board instance;
+		
+	[SerializeField] GameObject tile;
+	[SerializeField] GameObject blockPiecePrefab;
 
-        [SerializeField] GameObject tile;
-        [SerializeField] GameObject blockPiecePrefab;
+	[SerializeField] float length = 4.1f;
+	[SerializeField] int tileSize = 8;
 
-        [SerializeField] float length = 4.1f;
-        [SerializeField] int tileSize = 8;
-
-        Vector3[,] gameBoard;
-        bool[,] visited;
+	Vector3[,] gameBoard;
+	bool[,] visited;
 	GameObject[,] blockPieces;
 
 	int[] bingoY;
 	int[] bingoX;
 
-        public float GetTileSize() => length / tileSize;
+    public float GetTileSize() => length / tileSize;
 	private void Awake()
 	{
-                gameBoard = new Vector3[tileSize, tileSize];
+		gameBoard = new Vector3[tileSize, tileSize];
 		visited = new bool[tileSize, tileSize];
 		blockPieces = new GameObject[tileSize, tileSize];
+
 		bingoY = new int[tileSize];
 		bingoX = new int[tileSize];
 
@@ -38,8 +42,8 @@ public class Board : MonoBehaviour
 	}
 
 	void Start()
-        {
-                SetTiles();
+	{
+		SetTiles();
 
 
 
@@ -47,20 +51,20 @@ public class Board : MonoBehaviour
 
 
 	void SetTiles()
-        {
+    {
 		float size = GetTileSize();
 
 		Vector3 startPos = transform.position + new Vector3(-length / 2 + size/2, -length / 2+size/2, 0.0f);
 
 		for (int i = 0; i < tileSize; i++)
-                {
-                        for (int  j = 0; j < tileSize; j++ )
-                        {
+		{
+			for (int j = 0; j < tileSize; j++)
+			{
 				gameBoard[i, j] = startPos + new Vector3(j * size, i * size, 0.0f);
 				visited[i, j] = false;
 
 				var go = Instantiate<GameObject>(tile);
-                                go.transform.position = gameBoard[i, j];
+				go.transform.position = gameBoard[i, j];
 				go.transform.localScale = new Vector3(size, size, size);
 				go.transform.SetParent(transform, false);
 
@@ -71,27 +75,60 @@ public class Board : MonoBehaviour
 
 				blockPieces[i, j] = go2;
 				blockPieces[i, j].SetActive(false);
-				
+
 			}
 		}
-        }
+    }
 
-	public bool PutBlock(Block block)
+	public bool CanPlaceTileOnBoard(HashSet<(int,  int)> hash)
 	{
-		HashSet<(int, int)> hash = new HashSet<(int, int)> ();
+		int rows = visited.GetLength(0);
+		int cols = visited.GetLength(1);
+
+		var tileOffsets = hash.ToArray();
+		for (int i = 0; i < rows ; i++)
+		{
+			for (int j = 0; j < cols; j++)
+			{
+				bool canPlace = true;
+				foreach(var (dy, dx) in tileOffsets)
+				{
+					int y = i + dy;
+					int x = j + dx;	
+					if (y >= rows || x >= cols || visited[y, x])
+					{
+						canPlace = false;
+						break;
+					}
+				} 
+				if (canPlace) return true;
+			}
+		}
+		return false;
+	}
+
+
+	public bool CanPlaceTileHere(out HashSet<(int, int)> tilsPos,  Block block)
+	{
+		tilsPos = new HashSet<(int, int)>();
 		foreach (GameObject piece in block.pieces)
 		{
 			GetClosestTile(piece.transform.position, out int y, out int x);
 			if (y == -1 || x == -1)
 				continue;
 
-			hash.Add((y, x));
+			tilsPos.Add((y, x));
 		}
 
-		bool ret = hash.Count == block.pieces.Count;
-		if (ret)
+		return tilsPos.Count == block.pieces.Count;
+	}
+
+	public bool PutBlock(Block block)
+	{
+		bool ret = CanPlaceTileHere(out HashSet<(int, int)> hash, block);
+		if (ret) 
 		{
-			block.gameObject.SetActive(false);
+			block.RelaseBlock();
 
 			foreach(var pos in hash)
 			{
@@ -188,34 +225,10 @@ public class Board : MonoBehaviour
 		return left;
 	}
 
-
-	// TODO 
-	// 로직을 각 타일에서 하는걸로 변경
-	Dictionary<GameObject, GameObject> log = new Dictionary<GameObject, GameObject>();
 	private void OnTriggerStay2D(Collider2D collision)
 	{
-		//StartCoroutine(Timer(() =>
-		//{
-		//	GetClosestTile(collision.transform.position, out int y, out int x);
-		//	blockPieces[y, x].SetActive(true);
-		//	log[collision.gameObject] = blockPieces[y, x];
-		//}, 0.1f));
 
 	}
 
-	//private void OnTriggerExit2D(Collider2D collision)
-	//{
-
-	//	log[collision.gameObject]?.SetActive(false);
-
-	//}
-
-
-	IEnumerator Timer(Action action, float time)
-	{
-
-		yield return new WaitForSeconds(time);
-		action?.Invoke();	
-	}
 
 }

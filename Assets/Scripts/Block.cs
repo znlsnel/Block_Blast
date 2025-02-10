@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
@@ -11,10 +13,12 @@ public class Block : MonoBehaviour
 {
 	[SerializeField] GameObject blockPiece;
 
+	[NonSerialized] public List<GameObject> pieces = new List<GameObject>();
+	[NonSerialized] public UnityEvent onRelase = new UnityEvent();
+	[NonSerialized] public UnityEngine.Color blockColor;
+	HashSet<(int, int)> tiles;
 	Vector3 origin;
 	float originSize;
-	[NonSerialized] public List<GameObject> pieces = new List<GameObject>();
-	public UnityEngine.Color blockColor;
 
 	private void Awake()
 	{
@@ -31,19 +35,33 @@ public class Block : MonoBehaviour
 
 	private void Start()
 	{
+		ConvertTetrominoToArray(out tiles);
 		SetRotation();
 		origin = transform.position;
 		originSize = transform.localScale.x;
 		SetColor();
 	}
 
+	public bool CanPlaceTileOnBoard()
+	{
+		if (tiles == null)
+			return true;
+		return Board.instance.CanPlaceTileOnBoard(tiles);
+	}
+	void ConvertTetrominoToArray(out HashSet<(int, int)> position)
+	{
+		position = new HashSet<(int, int)>();
+		foreach (GameObject child in pieces)
+		{
+			Vector3 pos = child.transform.localPosition;
+			position.Add(((int)pos.y, (int)pos.x));
+		}
+	}
+
 	public void SetColor()
 	{
-		
 		foreach (GameObject piece in pieces)
 			piece.GetComponent<SpriteRenderer>().color = blockColor;
-		
-
 	}
 
 	public void SetRotation()
@@ -53,7 +71,11 @@ public class Block : MonoBehaviour
 		transform.rotation = Quaternion.Euler(0f, 0f, rot);
 	}
 
-
+	public void RelaseBlock()
+	{
+		onRelase?.Invoke();
+		gameObject.SetActive(false);
+	}
 
 	public void OnPlayerDeck()
 	{
@@ -83,5 +105,4 @@ public class Block : MonoBehaviour
 
 		transform.localScale = targetScale; // 정확한 크기로 설정
 	}
-
 }

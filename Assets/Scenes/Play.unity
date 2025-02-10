@@ -746,8 +746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c975c166da890994bb4f5b4bd15feb70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockCount: 3
-  blocks:
+  blocksPrefabs:
   - {fileID: 8054391776587491760, guid: 978c7a703bf93154dab54647de707cca, type: 3}
   - {fileID: 8054391776587491760, guid: cf5280174162a8144b055e7d9eccd539, type: 3}
   - {fileID: 8054391776587491760, guid: 07a27aa9830f68640b46d857eb00b7ec, type: 3}
@@ -755,11 +754,12 @@ MonoBehaviour:
   - {fileID: 8054391776587491760, guid: 5cf0a5c763ef3ae44a199ac13e74f457, type: 3}
   - {fileID: 8054391776587491760, guid: 1588ed94f49c3184a86aa0eeda1c9902, type: 3}
   - {fileID: 8054391776587491760, guid: b4d57572e6585314a9b31fbe89800bfe, type: 3}
-  - {fileID: 8054391776587491760, guid: cd42ef8726e6aaa47a610da63b2a2c18, type: 3}
   - {fileID: 8054391776587491760, guid: 0e01411beb13f6349bd85857c4764dc6, type: 3}
-  - {fileID: 8054391776587491760, guid: 56404d2c01915914f9baf667398cd09b, type: 3}
   - {fileID: 8054391776587491760, guid: 309511dc23c5f9547b37de515bfa108d, type: 3}
+  - {fileID: 8054391776587491760, guid: 56404d2c01915914f9baf667398cd09b, type: 3}
   - {fileID: 8054391776587491760, guid: 5180d932d3a4079418acdc6fda6ee205, type: 3}
+  - {fileID: 8054391776587491760, guid: cd42ef8726e6aaa47a610da63b2a2c18, type: 3}
+  blockCount: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

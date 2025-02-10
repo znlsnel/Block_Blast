@@ -6,15 +6,15 @@ using UnityEngine;
 public class PlayerDeck : MonoBehaviour
 {
 	public static PlayerDeck instance;
+
+	[SerializeField] List<GameObject> blocksPrefabs= new List<GameObject>();
 	[SerializeField] int blockCount = 3;
 	[NonSerialized] public int curBlocks = 0;
-	[SerializeField] List<GameObject> blocks= new List<GameObject>();
-
-	float width = 3.8f;
 
 	List<Vector3> points = new List<Vector3>();
+	HashSet<Block> myBlocks = new HashSet<Block>();	
 
-
+	float width = 3.8f;
 
 	private void Awake()
 	{
@@ -27,7 +27,6 @@ public class PlayerDeck : MonoBehaviour
 			pos += new Vector3(offset, 0, 0); 
 			points.Add(pos); 
 		}
-
 	}
 
 	private void Start()
@@ -39,20 +38,45 @@ public class PlayerDeck : MonoBehaviour
 	{
 		curBlocks -= 1;
 		if (curBlocks == 0)
-		{
 			SpawnBlock();
-		}
+		
+		else
+			CanContinueGame(); 
+
 	}
 
 	void SpawnBlock()
 	{
 		foreach (Vector3 pos in points)
 		{
-			//var go = Instantiate(blocks[UnityEngine.Random.Range(0, blocks.Count)]);
-			var go = Instantiate(blocks[1]);
+			var go = Instantiate(blocksPrefabs[UnityEngine.Random.Range(0, blocksPrefabs.Count)]);
 			go.transform.position = pos;
 			go.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+			Block block = go.GetComponent<Block>();
+			myBlocks.Add(block);
+			block.onRelase.AddListener(() => { myBlocks.Remove(block); });
 		}
 		curBlocks = points.Count;
+
+		CanContinueGame();
+	}
+
+	void CanContinueGame()
+	{
+		bool flag = false;
+		foreach (Block block in myBlocks)
+		{
+			if (block.CanPlaceTileOnBoard())
+			{
+				flag = true;
+				break;
+			}
+		}
+		if (flag == false)
+		{
+			Debug.Log("게임 실패!");
+		}
+
 	}
 }
