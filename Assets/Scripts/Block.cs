@@ -28,7 +28,7 @@ public class Block : MonoBehaviour
 		{
 			GameObject go = center.GetChild(i).gameObject;
 			pieces.Add(go);
-			go.GetComponent<SpriteRenderer>().sortingOrder++;
+			go.GetComponent<Tile>().GetSpriteRenderer().sortingOrder++;
 		}
 		blockColor = GameManager.instance.GetColor();
 	}
@@ -61,7 +61,7 @@ public class Block : MonoBehaviour
 	public void SetColor()
 	{
 		foreach (GameObject piece in pieces)
-			piece.GetComponent<SpriteRenderer>().color = blockColor;
+			piece.GetComponent<Tile>().GetSpriteRenderer().color = blockColor;
 	}
 
 	public void SetRotation()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-        public static GameManager instance;
+    public static GameManager instance;
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	public List<Color> colors = new List<Color>();
 	private void Awake()
@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	public Color GetColor()
 	{
 		return colors[Random.Range(0, colors.Count)];
-
 	}
+
+	
 }

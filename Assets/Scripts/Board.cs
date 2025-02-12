@@ -23,7 +23,7 @@ public class Board : MonoBehaviour
 
 	Vector3[,] gameBoard;
 	bool[,] visited;
-	GameObject[,] blockPieces;
+	Tile[,] blockPieces;
 
 	int[] bingoY;
 	int[] bingoX;
@@ -33,7 +33,7 @@ public class Board : MonoBehaviour
 	{
 		gameBoard = new Vector3[tileSize, tileSize];
 		visited = new bool[tileSize, tileSize];
-		blockPieces = new GameObject[tileSize, tileSize];
+		blockPieces = new Tile[tileSize, tileSize];
 
 		bingoY = new int[tileSize];
 		bingoX = new int[tileSize];
@@ -44,11 +44,7 @@ public class Board : MonoBehaviour
 	void Start()
 	{
 		SetTiles();
-
-
-
 	}
-
 
 	void SetTiles()
     {
@@ -73,8 +69,8 @@ public class Board : MonoBehaviour
 				go2.transform.localScale = new Vector3(size, size, size);
 				go2.transform.SetParent(transform, false);
 
-				blockPieces[i, j] = go2;
-				blockPieces[i, j].SetActive(false);
+				blockPieces[i, j] = go2.GetComponent<Tile>();
+				blockPieces[i, j].gameObject.SetActive(false);
 
 			}
 		}
@@ -135,8 +131,8 @@ public class Board : MonoBehaviour
 				int y = pos.Item1;
 				int x = pos.Item2;
 
-				blockPieces[y, x].SetActive(true);
-				blockPieces[y, x].GetComponent<SpriteRenderer>().color = block.blockColor;
+				blockPieces[y, x].PushTile();
+				blockPieces[y, x].GetSpriteRenderer().color = block.blockColor;
 
 				visited[y, x] = true;
 
@@ -145,7 +141,7 @@ public class Board : MonoBehaviour
 
 				CheckLine(y, x);
 			}
-			PlayerDeck.instance.UseBlock();
+			PlayManager.instance.UseBlock();
 		}
 
 		return ret;
@@ -160,7 +156,7 @@ public class Board : MonoBehaviour
 		{
 			for (int i = 0; i < blockPieces.GetLength(0); i++)
 			{
-				blockPieces[i, x].SetActive(false);
+				blockPieces[i, x].PopTile();
 				visited[i, x] = false;
 				bingoX[i] = Math.Max(0, bingoX[i]-1);
 			}
@@ -171,7 +167,7 @@ public class Board : MonoBehaviour
 		{
 			for (int i = 0; i < blockPieces.GetLength(1); i++)
 			{
-				blockPieces[y, i].SetActive(false);
+				blockPieces[y, i].PopTile();
 				visited[y, i] = false;
 				bingoY[i] = Math.Max(0, bingoY[i]-1);
 

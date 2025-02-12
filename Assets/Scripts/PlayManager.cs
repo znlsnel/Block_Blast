@@ -1,23 +1,26 @@
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDeck : MonoBehaviour
+public class PlayManager : MonoBehaviour
 {
-	public static PlayerDeck instance;
+	public static PlayManager instance;
 
 	[SerializeField] List<GameObject> blocksPrefabs= new List<GameObject>();
+	[SerializeField] GameObject gameOverUI;
 	[SerializeField] int blockCount = 3;
 	[NonSerialized] public int curBlocks = 0;
 
 	List<Vector3> points = new List<Vector3>();
 	HashSet<Block> myBlocks = new HashSet<Block>();	
-
 	float width = 3.8f;
 
 	private void Awake()
 	{
+		gameOverUI.SetActive(false);
 		instance = this;
 		float offset = width / (blockCount + 1);
 		Vector3 pos = transform.position + new Vector3(-width/2, 0, 0);
@@ -76,7 +79,19 @@ public class PlayerDeck : MonoBehaviour
 		if (flag == false)
 		{
 			Debug.Log("게임 실패!");
+			gameOverUI.SetActive(true);
 		}
 
 	}
+
+	public void SetTimer(Action action, float time)
+	{
+		StartCoroutine(MyTimer(action, time)); 
+	}
+	IEnumerator MyTimer(Action action, float timer)
+	{
+		yield return new WaitForSeconds(timer);
+		action?.Invoke();
+	}
+
 }
