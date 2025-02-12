@@ -75,6 +75,7 @@ public class Block : MonoBehaviour
 	{
 		onRelase?.Invoke();
 		gameObject.SetActive(false);
+		Destroy(gameObject);
 	}
 
 	public void OnPlayerDeck()

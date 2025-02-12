@@ -12,7 +12,6 @@ public class PlayManager : MonoBehaviour
 	[SerializeField] List<GameObject> blocksPrefabs= new List<GameObject>();
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] int blockCount = 3;
-	[NonSerialized] public int curBlocks = 0;
 
 	List<Vector3> points = new List<Vector3>();
 	HashSet<Block> myBlocks = new HashSet<Block>();	
@@ -39,14 +38,12 @@ public class PlayManager : MonoBehaviour
 
 	public void UseBlock()
 	{
-		curBlocks -= 1;
-		if (curBlocks == 0)
+		if (myBlocks.Count == 0)
 			SpawnBlock();
 		
 		else
 			CanContinueGame(); 
-
-	}
+	} 
 
 	void SpawnBlock()
 	{
@@ -60,8 +57,6 @@ public class PlayManager : MonoBehaviour
 			myBlocks.Add(block);
 			block.onRelase.AddListener(() => { myBlocks.Remove(block); });
 		}
-		curBlocks = points.Count;
-
 		CanContinueGame();
 	}
 
