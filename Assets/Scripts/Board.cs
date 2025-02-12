@@ -102,8 +102,6 @@ public class Board : MonoBehaviour
 		}
 		return false;
 	}
-
-
 	public bool CanPlaceTileHere(out HashSet<(int, int)> tilsPos,  Block block)
 	{
 		tilsPos = new HashSet<(int, int)>();

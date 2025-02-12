@@ -80,7 +80,8 @@ public class Block : MonoBehaviour
 	public void OnPlayerDeck()
 	{
 		transform.position = origin;
-		StartCoroutine(ResizeBlock(originSize, 0.1f));   
+		//StartCoroutine(ResizeBlock(originSize, 0.1f));
+		transform.localScale = new Vector3(originSize, originSize, originSize);
 	} 
 
 	public void OnDragMode()

@@ -12,22 +12,20 @@ public class Tile : MonoBehaviour
 
     public void PopTile()
     { 
-        anim.SetBool("pop", true);
-        PlayManager.instance.SetTimer(() => { 
-            gameObject.SetActive(false);
-            anim.SetBool("pop", false); 
-        
-        }, 1.0f);
-    }
-    
-    public void PushTile()
-    {
-        gameObject.SetActive(true);
-		anim.SetBool("push", true);
-		PlayManager.instance.SetTimer(() => { 
-            anim.SetBool("push", false); 
-		}, 1.0f);
+	    anim.SetTrigger("pop");
 	}
 
-    public SpriteRenderer GetSpriteRenderer() => sr;
+	public void PushTile()
+    {
+        gameObject.SetActive(true);
+		anim.SetTrigger("push");
+	}
+
+    public void HideTile()
+    {
+        gameObject.SetActive(false);
+    }
+
+
+	public SpriteRenderer GetSpriteRenderer() => sr;
 }
