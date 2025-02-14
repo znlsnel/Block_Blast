@@ -2,11 +2,13 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.Notifications.iOS;
 using Unity.VisualScripting;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static UnityEditor.PlayerSettings;
@@ -22,21 +24,13 @@ public class Board : MonoBehaviour
 	[SerializeField] int tileSize = 8;
 
 	Vector3[,] gameBoard;
-	bool[,] visited;
 	Tile[,] blockPieces;
-
-	int[] bingoY;
-	int[] bingoX;
 
     public float GetTileSize() => length / tileSize;
 	private void Awake()
 	{
 		gameBoard = new Vector3[tileSize, tileSize];
-		visited = new bool[tileSize, tileSize];
 		blockPieces = new Tile[tileSize, tileSize];
-
-		bingoY = new int[tileSize];
-		bingoX = new int[tileSize];
 
 		instance = this;
 	}
@@ -57,7 +51,6 @@ public class Board : MonoBehaviour
 			for (int j = 0; j < tileSize; j++)
 			{
 				gameBoard[i, j] = startPos + new Vector3(j * size, i * size, 0.0f);
-				visited[i, j] = false;
 
 				var go = Instantiate<GameObject>(tile);
 				go.transform.position = gameBoard[i, j];
@@ -76,28 +69,30 @@ public class Board : MonoBehaviour
 		}
     }
 
+	bool isVisited(int y, int x)
+	{
+		return blockPieces[y, x].isActiveTile;
+	}
+
+	// 회전값 반영 안됨
 	public bool CanPlaceTileOnBoard(HashSet<(int,  int)> hash)
 	{
-		int rows = visited.GetLength(0);
-		int cols = visited.GetLength(1);
-
-		var tileOffsets = hash.ToArray();
-		for (int i = 0; i < rows ; i++)
+		for (int i = 0; i < tileSize; i++)
 		{
-			for (int j = 0; j < cols; j++)
+			for (int j = 0; j < tileSize; j++)
 			{
 				bool canPlace = true;
-				foreach(var (dy, dx) in tileOffsets)
+				foreach(var (dy, dx) in hash)
 				{
-					int y = i + dy;
-					int x = j + dx;	
-					if (y >= rows || x >= cols || visited[y, x])
+					var (y, x) = (i + dy, j + dx);
+					if (y < 0 || x < 0 || y >= tileSize || x >= tileSize || isVisited(y, x))
 					{
-						canPlace = false;
+						canPlace = false; 
 						break;
 					}
 				} 
-				if (canPlace) return true;
+				if (canPlace) 
+					return true;
 			}
 		}
 		return false;
@@ -131,93 +126,88 @@ public class Board : MonoBehaviour
 
 				blockPieces[y, x].PushTile();
 				blockPieces[y, x].GetSpriteRenderer().color = block.blockColor;
-
-				visited[y, x] = true;
-
-				++bingoY[x];
-				++bingoX[y];
-
-				CheckLine(y, x);
 			}
-			PlayManager.instance.UseBlock();
+			Utils.instance.SetTimer(()=> {
+				CheckLine();
+				PlayManager.instance.UseBlock(); 
+			} 
+			, 0.1f);
+			
+			
 		}
+		
 
 		return ret;
 	}
 	
-	void CheckLine(int y, int x)
+	void CheckLine()
 	{
-		bool successY = bingoY[x] == tileSize;
-		bool successX = bingoX[y] == tileSize;
+		List<int> successY = new List<int>();
+		List<int> successX = new List<int>();
 
-		if (successY)
+		for (int y = 0; y < blockPieces.GetLength(0); y++)
 		{
-			for (int i = 0; i < blockPieces.GetLength(0); i++)
+			bool flag = true;
+			for (int x = 0; x < blockPieces.GetLength(1); x++)
 			{
-				blockPieces[i, x].PopTile();
-				visited[i, x] = false;
-				bingoX[i] = Math.Max(0, bingoX[i]-1);
+				if (isVisited(y, x) == false)
+				{
+					flag = false;
+					break;
+				}
 			}
-			bingoY[x] = 0;
+			if (flag)
+				successX.Add(y);
 		}
 
-		if (successX)
-		{
-			for (int i = 0; i < blockPieces.GetLength(1); i++)
-			{
-				blockPieces[y, i].PopTile();
-				visited[y, i] = false;
-				bingoY[i] = Math.Max(0, bingoY[i]-1);
 
+		for (int x = 0; x < blockPieces.GetLength(1); x++)
+		{
+			bool flag = true;
+			for (int y = 0; y < blockPieces.GetLength(0); y++)
+			{
+				if (isVisited(y, x) == false)
+				{
+					flag = false;
+					break;
+				}
 			}
-			bingoX[y] = 0;
+			if (flag)
+				successY.Add(x);
 		}
+
+		foreach (int idx in successY)
+			for (int i = 0; i < tileSize; i++)
+				blockPieces[i, idx].PopTile();
+
+
+		foreach (int idx in successX)
+			for (int i = 0; i < tileSize; i++)
+				blockPieces[idx, i].PopTile();
+
 	}
+
 
 	void GetClosestTile(Vector3 pos, out int y, out int x)
 	{
-		int rows = gameBoard.GetLength(0);
-		int cols = gameBoard.GetLength(1);
+		float size = GetTileSize();
+		Vector3 target = pos - (gameBoard[0, 0] - new Vector3(size/2, size/2, 0));
+		Vector3 max = (gameBoard[tileSize - 1, tileSize - 1] - gameBoard[0, 0]) + new Vector3(size, size, 0);
+		y = -1;
+		x = -1;
+	
+		if (target.x < 0 || target.y < 0 || target.x > max.x  || target.y > max.y)
+			return;
 
-		// X축과 Y축을 이진 탐색으로 찾기
-		int closestRow = BinarySearch(pos.y, true, rows);
-		int closestCol = BinarySearch(pos.x, false, cols);
-
-		y = closestRow;
-		x = closestCol;
-		if (visited[y, x] == true)
+		y = (int)(target.y / size);
+		x = (int)(target.x / size);
+		if (isVisited(y, x) == true)
 		{
 			y = -1;
 			x = -1;
 		}
 	}
-	private int BinarySearch(float target, bool isRow, int maxIndex)
-	{
-		int left = 0, right = maxIndex - 1;
 
-		while (left < right)
-		{
-			int mid = (left + right) / 2;
-			float midValue = isRow ? gameBoard[mid, 0].y : gameBoard[0, mid].x;
-
-			if (midValue < target)
-				left = mid + 1;
-			else
-				right = mid;
-		}
-
-		// 가장 가까운 인덱스 반환
-		if (left > 0)
-		{
-			float prevValue = isRow ? gameBoard[left - 1, 0].y : gameBoard[0, left - 1].x;
-			float currValue = isRow ? gameBoard[left, 0].y : gameBoard[0, left].x;
-
-			if (Mathf.Abs(prevValue - target) < Mathf.Abs(currValue - target))
-				return left - 1;
-		}
-
-		return left;
-	}
 
 	private void OnTriggerStay2D(Collider2D collision)
 	{

@@ -41,8 +41,7 @@ public class PlayManager : MonoBehaviour
 		if (myBlocks.Count == 0)
 			SpawnBlock();
 		
-		else
-			CanContinueGame(); 
+		CanContinueGame(); 
 	} 
 
 	void SpawnBlock()

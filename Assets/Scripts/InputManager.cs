@@ -38,14 +38,14 @@ public class InputManager : MonoBehaviour
 		}
 
 	}
+
+
 	void RelaseScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
-		
 		if (block != null && Board.instance.PutBlock(block) == false)
 			block.OnPlayerDeck();
 		 
 		block = null;
-
 	}
 	
 

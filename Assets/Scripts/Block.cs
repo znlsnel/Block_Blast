@@ -16,9 +16,11 @@ public class Block : MonoBehaviour
 	[NonSerialized] public List<GameObject> pieces = new List<GameObject>();
 	[NonSerialized] public UnityEvent onRelase = new UnityEvent();
 	[NonSerialized] public UnityEngine.Color blockColor;
-	HashSet<(int, int)> tiles;
+
+	List<HashSet<(int, int)>> tiles = new List<HashSet<(int, int)>>();
 	Vector3 origin;
 	float originSize;
+	int rot = 0;
 
 	private void Awake()
 	{
@@ -31,30 +33,42 @@ public class Block : MonoBehaviour
 			go.GetComponent<Tile>().GetSpriteRenderer().sortingOrder++;
 		}
 		blockColor = GameManager.instance.GetColor();
+
+		InitTilePos();
+		SetColor(); 
 	}
 
 	private void Start()
 	{
-		ConvertTetrominoToArray(out tiles);
-		SetRotation();
-		origin = transform.position;
+		origin = transform.position; 
 		originSize = transform.localScale.x;
-		SetColor();
 	}
 
 	public bool CanPlaceTileOnBoard()
 	{
-		if (tiles == null)
+		if (tiles[rot] == null)
 			return true;
-		return Board.instance.CanPlaceTileOnBoard(tiles);
+
+		return Board.instance.CanPlaceTileOnBoard(tiles[rot]);
 	}
-	void ConvertTetrominoToArray(out HashSet<(int, int)> position)
+
+	void InitTilePos()
 	{
-		position = new HashSet<(int, int)>();
+		rot = UnityEngine.Random.Range(0, 4);
+		transform.rotation = Quaternion.Euler(0f, 0f, rot * -90f); 
+
+		tiles.Add(new HashSet<(int, int)>());
 		foreach (GameObject child in pieces)
 		{
 			Vector3 pos = child.transform.localPosition;
-			position.Add(((int)pos.y, (int)pos.x));
+			tiles[0].Add(((int)pos.y, (int)pos.x)); 
+		}
+
+		for (int i = 1; i < 4; i++)
+		{
+			tiles.Add(new HashSet<(int, int)>());
+			foreach (var tile in tiles[i-1])
+				tiles[i].Add((-tile.Item2, tile.Item1));
 		}
 	}
 
@@ -64,12 +78,7 @@ public class Block : MonoBehaviour
 			piece.GetComponent<Tile>().GetSpriteRenderer().color = blockColor;
 	}
 
-	public void SetRotation()
-	{
-		int rand = UnityEngine.Random.Range(0, 4);
-		float rot = rand == 1 ? 90f : rand == 2 ? -90f : rand == 3 ? 180f : 0f; 
-		transform.rotation = Quaternion.Euler(0f, 0f, rot);
-	}
+	// (-x, y)
 
 	public void RelaseBlock()
 	{
