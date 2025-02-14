@@ -30,7 +30,7 @@ public class Block : MonoBehaviour
 		{
 			GameObject go = center.GetChild(i).gameObject;
 			pieces.Add(go);
-			go.GetComponent<Tile>().GetSpriteRenderer().sortingOrder++;
+			go.GetComponent<Tile>().IncreaseSortingOrder();
 		}
 		blockColor = GameManager.instance.GetColor();
 
@@ -75,7 +75,7 @@ public class Block : MonoBehaviour
 	public void SetColor()
 	{
 		foreach (GameObject piece in pieces)
-			piece.GetComponent<Tile>().GetSpriteRenderer().color = blockColor;
+			piece.GetComponent<Tile>().SetColor(blockColor);
 	}
 
 	// (-x, y)
@@ -87,8 +87,12 @@ public class Block : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	public void OnPlayerDeck()
+	Coroutine resize;
+	public void ReturnPlayerDeck()
 	{
+		if (resize != null)
+			StopCoroutine(resize);
+
 		transform.position = origin;
 		//StartCoroutine(ResizeBlock(originSize, 0.1f));
 		transform.localScale = new Vector3(originSize, originSize, originSize);
@@ -96,7 +100,9 @@ public class Block : MonoBehaviour
 
 	public void OnDragMode()
 	{
-		StartCoroutine(ResizeBlock(Board.instance.GetTileSize(), 0.2f));
+		if (resize != null)
+			StopCoroutine(resize);
+		resize = StartCoroutine(ResizeBlock(Board.instance.GetTileSize(), 0.2f));
 	}
 
 	IEnumerator ResizeBlock(float size, float time)
@@ -115,5 +121,6 @@ public class Block : MonoBehaviour
 		} 
 
 		transform.localScale = targetScale; // 정확한 크기로 설정
+		resize = null;
 	}
 }

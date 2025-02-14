@@ -125,18 +125,14 @@ public class Board : MonoBehaviour
 				int x = pos.Item2;
 
 				blockPieces[y, x].PushTile();
-				blockPieces[y, x].GetSpriteRenderer().color = block.blockColor;
-			}
+				blockPieces[y, x].SetColor(block.blockColor);
+			} 
 			Utils.instance.SetTimer(()=> {
 				CheckLine();
 				PlayManager.instance.UseBlock(); 
 			} 
 			, 0.1f);
-			
-			
 		}
-		
-
 		return ret;
 	}
 	
@@ -187,6 +183,17 @@ public class Board : MonoBehaviour
 
 	}
 
+	public void HoverBlock(Block block)
+	{
+		if (CanPlaceTileHere(out HashSet<(int, int)> hash, block))
+		{
+			foreach (var (y, x) in hash)
+			{
+				blockPieces[y, x].SetColor( block.blockColor); 
+				blockPieces[y, x].OnFadeMode();
+			}
+		}
+	}
 
 	void GetClosestTile(Vector3 pos, out int y, out int x)
 	{

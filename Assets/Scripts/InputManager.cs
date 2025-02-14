@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour
 	public InputActionReference clickAction;
 	public InputActionReference handAction;
 
-	Block block = null;
+	Block myBlock = null;
 	Vector3 handPos;
 	void Start()
 	{
@@ -23,6 +23,11 @@ public class InputManager : MonoBehaviour
 		handAction.action.performed += MoveHandPos;
 	}
 
+	private void LateUpdate()
+	{
+		if (myBlock != null)
+			Board.instance.HoverBlock(myBlock);
+	}
 
 	void ClickScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
@@ -33,8 +38,8 @@ public class InputManager : MonoBehaviour
 		if (hit.collider != null && hit.collider.GetComponent<Block>() != null) // 오브젝트가 감지된 경우
 		{
 			Debug.Log("Clicked Object: " + hit.collider.gameObject.name);
-			block = hit.collider.GetComponent<Block>();
-			block.OnDragMode();
+			myBlock = hit.collider.GetComponent<Block>();
+			myBlock.OnDragMode();
 		}
 
 	}
@@ -42,10 +47,10 @@ public class InputManager : MonoBehaviour
 
 	void RelaseScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
-		if (block != null && Board.instance.PutBlock(block) == false)
-			block.OnPlayerDeck();
+		if (myBlock != null && Board.instance.PutBlock(myBlock) == false)
+			myBlock.ReturnPlayerDeck();
 		 
-		block = null;
+		myBlock = null;
 	}
 	
 
@@ -53,11 +58,12 @@ public class InputManager : MonoBehaviour
 	void MoveHandPos(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
 		handPos = Camera.main.ScreenToWorldPoint(obj.ReadValue<Vector2>());
-		if (block != null)
+		if (myBlock != null)
 		{
 			Vector3 pos = handPos;
 			pos.z = 0;
-			block.transform.position = pos;
+			myBlock.transform.position = pos;
+			
 		}
 	}
 
