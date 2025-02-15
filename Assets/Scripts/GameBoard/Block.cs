@@ -13,11 +13,11 @@ public class Block : MonoBehaviour
 {
 	[SerializeField] GameObject blockPiece;
 
-	[NonSerialized] public List<GameObject> pieces = new List<GameObject>();
+	[NonSerialized] public List<GameObject> tiles = new List<GameObject>();
 	[NonSerialized] public UnityEvent onRelase = new UnityEvent();
 	[NonSerialized] public UnityEngine.Color blockColor;
 
-	List<HashSet<(int, int)>> tiles = new List<HashSet<(int, int)>>();
+	List<HashSet<(int, int)>> tileLoc = new List<HashSet<(int, int)>>();
 	Vector3 origin;
 	float originSize;
 	int rot = 0;
@@ -29,10 +29,10 @@ public class Block : MonoBehaviour
 		for (int i = 0; i < childCnt; i++)
 		{
 			GameObject go = center.GetChild(i).gameObject;
-			pieces.Add(go);
+			tiles.Add(go);
 			go.GetComponent<Tile>().IncreaseSortingOrder();
 		}
-		blockColor = GameManager.instance.GetColor();
+		blockColor = DataManager.Instance.GetColor();
 
 		InitTilePos();
 		SetColor(); 
@@ -46,35 +46,36 @@ public class Block : MonoBehaviour
 
 	public bool CanPlaceTileOnBoard()
 	{
-		if (tiles[rot] == null)
+		if (tileLoc[rot] == null)
 			return true;
 
-		return Board.instance.CanPlaceTileOnBoard(tiles[rot]);
+		return Board.instance.CanPlaceTile(tileLoc[rot]);
 	}
 
+	public HashSet<(int, int)> GetTile() => tileLoc[rot];
 	void InitTilePos()
 	{
 		rot = UnityEngine.Random.Range(0, 4);
 		transform.rotation = Quaternion.Euler(0f, 0f, rot * -90f); 
 
-		tiles.Add(new HashSet<(int, int)>());
-		foreach (GameObject child in pieces)
+		tileLoc.Add(new HashSet<(int, int)>());
+		foreach (GameObject child in tiles)
 		{
 			Vector3 pos = child.transform.localPosition;
-			tiles[0].Add(((int)pos.y, (int)pos.x)); 
+			tileLoc[0].Add(((int)pos.y, (int)pos.x)); 
 		}
 
 		for (int i = 1; i < 4; i++)
 		{
-			tiles.Add(new HashSet<(int, int)>());
-			foreach (var tile in tiles[i-1])
-				tiles[i].Add((-tile.Item2, tile.Item1));
+			tileLoc.Add(new HashSet<(int, int)>());
+			foreach (var tile in tileLoc[i-1])
+				tileLoc[i].Add((-tile.Item2, tile.Item1));
 		}
 	}
 
 	public void SetColor()
 	{
-		foreach (GameObject piece in pieces)
+		foreach (GameObject piece in tiles)
 			piece.GetComponent<Tile>().SetColor(blockColor);
 	}
 

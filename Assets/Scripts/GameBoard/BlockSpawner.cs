@@ -5,12 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayManager : MonoBehaviour
+public class BlockSpawner : MonoBehaviour
 {
-	public static PlayManager instance;
+	public static BlockSpawner instance;
 
 	[SerializeField] List<GameObject> blocksPrefabs= new List<GameObject>();
-	[SerializeField] GameObject gameOverUI;
 	[SerializeField] int blockCount = 3;
 
 	List<Vector3> points = new List<Vector3>();
@@ -19,7 +18,6 @@ public class PlayManager : MonoBehaviour
 
 	private void Awake()
 	{
-		gameOverUI.SetActive(false);
 		instance = this;
 		float offset = width / (blockCount + 1);
 		Vector3 pos = transform.position + new Vector3(-width/2, 0, 0);
@@ -30,20 +28,10 @@ public class PlayManager : MonoBehaviour
 			points.Add(pos); 
 		}
 	}
-
 	private void Start()
 	{
 		SpawnBlock();
 	} 
-
-	public void UseBlock()
-	{
-		if (myBlocks.Count == 0)
-			SpawnBlock();
-		
-		CanContinueGame(); 
-	} 
-
 	void SpawnBlock()
 	{
 		foreach (Vector3 pos in points)
@@ -56,6 +44,16 @@ public class PlayManager : MonoBehaviour
 			myBlocks.Add(block);
 			block.onRelase.AddListener(() => { myBlocks.Remove(block); });
 		}
+		CanContinueGame();
+	}
+
+
+
+	public void UseBlock()
+	{
+		if (myBlocks.Count == 0)
+			SpawnBlock();
+
 		CanContinueGame();
 	}
 
@@ -73,19 +71,9 @@ public class PlayManager : MonoBehaviour
 		if (flag == false)
 		{
 			Debug.Log("게임 실패!");
-			gameOverUI.SetActive(true);
+			
 		}
-
 	}
 
-	public void SetTimer(Action action, float time)
-	{
-		StartCoroutine(MyTimer(action, time)); 
-	}
-	IEnumerator MyTimer(Action action, float timer)
-	{
-		yield return new WaitForSeconds(timer);
-		action?.Invoke();
-	}
 
 }

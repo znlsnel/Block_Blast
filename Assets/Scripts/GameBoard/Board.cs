@@ -24,22 +24,20 @@ public class Board : MonoBehaviour
 	[SerializeField] int tileSize = 8;
 
 	Vector3[,] gameBoard;
-	Tile[,] blockPieces;
-
-    public float GetTileSize() => length / tileSize;
+	Tile[,] tiles;
+	Block hoveringBlock;
 	private void Awake()
 	{
 		gameBoard = new Vector3[tileSize, tileSize];
-		blockPieces = new Tile[tileSize, tileSize];
-
+		tiles = new Tile[tileSize, tileSize];
 		instance = this;
 	}
 
 	void Start()
 	{
 		SetTiles();
+		StartCoroutine(CheckHover());
 	}
-
 	void SetTiles()
     {
 		float size = GetTileSize();
@@ -62,20 +60,15 @@ public class Board : MonoBehaviour
 				go2.transform.localScale = new Vector3(size, size, size);
 				go2.transform.SetParent(transform, false);
 
-				blockPieces[i, j] = go2.GetComponent<Tile>();
-				blockPieces[i, j].gameObject.SetActive(false);
+				tiles[i, j] = go2.GetComponent<Tile>();
+				tiles[i, j].gameObject.SetActive(false);
 
 			}
 		}
     }
-
-	bool isVisited(int y, int x)
-	{
-		return blockPieces[y, x].isActiveTile;
-	}
-
-	// 회전값 반영 안됨
-	public bool CanPlaceTileOnBoard(HashSet<(int,  int)> hash)
+	public float GetTileSize() => length / tileSize;
+	bool isVisited(int y, int x) => tiles[y, x].isActiveTile;
+	public bool CanPlaceTile(HashSet<(int,  int)> hash)
 	{
 		for (int i = 0; i < tileSize; i++)
 		{
@@ -97,10 +90,10 @@ public class Board : MonoBehaviour
 		}
 		return false;
 	}
-	public bool CanPlaceTileHere(out HashSet<(int, int)> tilsPos,  Block block)
+	public bool CanPlaceTile(out HashSet<(int, int)> tilsPos,  Block block)
 	{
 		tilsPos = new HashSet<(int, int)>();
-		foreach (GameObject piece in block.pieces)
+		foreach (GameObject piece in block.tiles)
 		{
 			GetClosestTile(piece.transform.position, out int y, out int x);
 			if (y == -1 || x == -1)
@@ -109,12 +102,11 @@ public class Board : MonoBehaviour
 			tilsPos.Add((y, x));
 		}
 
-		return tilsPos.Count == block.pieces.Count;
+		return tilsPos.Count == block.tiles.Count;
 	}
-
 	public bool PutBlock(Block block)
 	{
-		bool ret = CanPlaceTileHere(out HashSet<(int, int)> hash, block);
+		bool ret = CanPlaceTile(out HashSet<(int, int)> hash, block);
 		if (ret) 
 		{
 			block.RelaseBlock();
@@ -124,27 +116,26 @@ public class Board : MonoBehaviour
 				int y = pos.Item1;
 				int x = pos.Item2;
 
-				blockPieces[y, x].PushTile();
-				blockPieces[y, x].SetColor(block.blockColor);
+				tiles[y, x].PushTile();
+				tiles[y, x].SetColor(block.blockColor);
 			} 
 			Utils.instance.SetTimer(()=> {
-				CheckLine();
-				PlayManager.instance.UseBlock(); 
+				CheckBingo();
+				BlockSpawner.instance.UseBlock(); 
 			} 
 			, 0.1f);
 		}
 		return ret;
 	}
-	
-	void CheckLine()
+	void CheckBingo()
 	{
 		List<int> successY = new List<int>();
 		List<int> successX = new List<int>();
 
-		for (int y = 0; y < blockPieces.GetLength(0); y++)
+		for (int y = 0; y < tiles.GetLength(0); y++)
 		{
 			bool flag = true;
-			for (int x = 0; x < blockPieces.GetLength(1); x++)
+			for (int x = 0; x < tiles.GetLength(1); x++)
 			{
 				if (isVisited(y, x) == false)
 				{
@@ -157,10 +148,10 @@ public class Board : MonoBehaviour
 		}
 
 
-		for (int x = 0; x < blockPieces.GetLength(1); x++)
+		for (int x = 0; x < tiles.GetLength(1); x++)
 		{
 			bool flag = true;
-			for (int y = 0; y < blockPieces.GetLength(0); y++)
+			for (int y = 0; y < tiles.GetLength(0); y++)
 			{
 				if (isVisited(y, x) == false)
 				{
@@ -174,27 +165,14 @@ public class Board : MonoBehaviour
 
 		foreach (int idx in successY)
 			for (int i = 0; i < tileSize; i++)
-				blockPieces[i, idx].PopTile();
+				tiles[i, idx].PopTile();
 
 
 		foreach (int idx in successX)
 			for (int i = 0; i < tileSize; i++)
-				blockPieces[idx, i].PopTile();
+				tiles[idx, i].PopTile();
 
 	}
-
-	public void HoverBlock(Block block)
-	{
-		if (CanPlaceTileHere(out HashSet<(int, int)> hash, block))
-		{
-			foreach (var (y, x) in hash)
-			{
-				blockPieces[y, x].SetColor( block.blockColor); 
-				blockPieces[y, x].OnFadeMode();
-			}
-		}
-	}
-
 	void GetClosestTile(Vector3 pos, out int y, out int x)
 	{
 		float size = GetTileSize();
@@ -215,11 +193,111 @@ public class Board : MonoBehaviour
 		}
 	}
 
-
-	private void OnTriggerStay2D(Collider2D collision)
+	public void Hovering(HashSet<(int, int)> hash)
 	{
-
+		foreach (var (y, x) in hash)
+		{
+			tiles[y, x].SetColor(hoveringBlock.blockColor);
+			tiles[y, x].FadeMode();
+		}
 	}
 
+	public void SetHoverBlock(Block block)
+	{
+		hoveringBlock = block; 
+	}
+
+	IEnumerator CheckHover()
+	{
+		HashSet<(int, int)> prevIdxs = null; 
+		var (prevY, prevX) = (-10, -10);
+
+		while (true)
+		{
+			if (hoveringBlock != null && CanPlaceTile(out var curIdxs, hoveringBlock))
+			{
+				GetClosestTile(hoveringBlock.tiles[0].transform.position, out int y, out int x);
+				var (curY, curX) = (y, x);
+
+				if (prevY != curY || prevX != curX)
+				{
+					Hovering(curIdxs); 
+					prevY = curY;
+					prevX = curX;
+
+					// 중복된 인덱스 제거
+					if (curIdxs != null && prevIdxs != null)
+					{
+						foreach (var curIdx in curIdxs)
+						prevIdxs.Remove(curIdx);
+					} 
+
+					if (prevIdxs != null)
+					{
+						foreach (var h in prevIdxs)
+						{
+							(y, x) = h;
+							tiles[y, x].FadeMode(false);
+						}
+					}
+
+					prevIdxs = curIdxs;
+				} 
+			}
+			else
+			{
+				(prevY, prevX) = (-10, -10);
+				if (prevIdxs != null)
+				{
+					foreach (var h in prevIdxs)
+					{
+						var (y, x) = h;
+						tiles[y, x].FadeMode(false);
+					}
+					prevIdxs = null;
+				}
+			}
+
+			yield return null;
+		}
+	}
+
+
+	public void GameOver()
+	{
+		StartCoroutine(RunGameOver());
+	}
+
+	int[] dy = { -1, -1, 0 };
+	int[] dx = { 1, 0, 1 };
+	IEnumerator RunGameOver()
+	{
+		Color color = DataManager.Instance.GetGameOverColor();
+
+		HashSet<(int, int)> visited = new HashSet<(int, int)>();
+		Queue<(int, int)> q = new Queue<(int, int)> ();
+
+		q.Enqueue((tileSize - 1, 0));
+		visited.Add((tileSize - 1, 0));
+
+		while (q.Count > 0)
+		{
+			var (curY, curX) = q.Dequeue();
+			tiles[curY, curX].GameOver(color);
+
+			for (int i = 0; i < 3; i++)
+			{
+				var (nxtY, nxtX) = (curY + dy[i], curX + dx[i]);
+
+				if (nxtY < 0 || nxtX < 0 || nxtX >= dy.GetLength(1) || visited.Contains((nxtY, nxtX)))
+					continue;
+
+				q.Enqueue((nxtY, nxtX));
+			}
+
+			yield return new WaitForSeconds(0.2f);
+		}
+
+	}
 
 }

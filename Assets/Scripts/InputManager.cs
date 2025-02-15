@@ -23,12 +23,6 @@ public class InputManager : MonoBehaviour
 		handAction.action.performed += MoveHandPos;
 	}
 
-	private void LateUpdate()
-	{
-		if (myBlock != null)
-			Board.instance.HoverBlock(myBlock);
-	}
-
 	void ClickScreen(InputAction.CallbackContext obj) // Action이 실행될 때
 	{
 
@@ -40,6 +34,7 @@ public class InputManager : MonoBehaviour
 			Debug.Log("Clicked Object: " + hit.collider.gameObject.name);
 			myBlock = hit.collider.GetComponent<Block>();
 			myBlock.OnDragMode();
+			Board.instance.SetHoverBlock(myBlock);
 		}
 
 	}
@@ -51,8 +46,9 @@ public class InputManager : MonoBehaviour
 			myBlock.ReturnPlayerDeck();
 		 
 		myBlock = null;
+		Board.instance.SetHoverBlock(myBlock);
 	}
-	
+
 
 
 	void MoveHandPos(InputAction.CallbackContext obj) // Action이 실행될 때
