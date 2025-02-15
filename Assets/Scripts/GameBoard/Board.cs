@@ -11,7 +11,9 @@ using Unity.VisualScripting;
 using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using static UnityEditor.PlayerSettings;
+using Object = UnityEngine.Object;
 
 public class Board : MonoBehaviour
 {
@@ -19,20 +21,27 @@ public class Board : MonoBehaviour
 		
 	[SerializeField] GameObject tile;
 	[SerializeField] GameObject blockPiecePrefab;
-
 	[SerializeField] float length = 4.1f;
 	[SerializeField] int tileSize = 8;
+
+	[Space(10)]
+	[SerializeField] GameObject gameOverUI;
+	[SerializeField] Object gameOverScene;
+
+
 
 	Vector3[,] gameBoard;
 	Tile[,] tiles;
 	Block hoveringBlock;
+
 	private void Awake()
 	{
+		gameOverUI.SetActive(false);
 		gameBoard = new Vector3[tileSize, tileSize];
 		tiles = new Tile[tileSize, tileSize];
 		instance = this;
 	}
-
+ 
 	void Start()
 	{
 		SetTiles();
@@ -272,9 +281,8 @@ public class Board : MonoBehaviour
 	int[] dx = { 0, 1, 1}; 
 	IEnumerator RunGameOver()
 	{
-		
-
-		yield return new WaitForSeconds(2.0f);
+		gameOverUI.SetActive(true);
+		yield return new WaitForSeconds(1.0f); 
 		Color color = DataManager.Instance.GetGameOverColor();
 
 		HashSet<(int, int)> visited = new HashSet<(int, int)>();
@@ -303,6 +311,8 @@ public class Board : MonoBehaviour
 			yield return new WaitForSeconds(0.03f); 
 		}
 
+		yield return new WaitForSeconds(1.0f);
+		SceneManager.LoadScene(gameOverScene.name);
 	}
 
 }

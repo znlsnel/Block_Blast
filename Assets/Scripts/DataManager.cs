@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DataManager : Singleton<DataManager>
 {
@@ -12,7 +13,5 @@ public class DataManager : Singleton<DataManager>
 		return colors[Random.Range(0, colors.Count)];
 	}
 	public Color GetGameOverColor() => gameOverColor;
-
-
 
 }
