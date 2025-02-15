@@ -45,6 +45,7 @@ public class Board : MonoBehaviour
  
 	void Start()
 	{
+		DataManager.Instance.InitScore();
 		SetTiles();
 		StartCoroutine(CheckHover());
 	}

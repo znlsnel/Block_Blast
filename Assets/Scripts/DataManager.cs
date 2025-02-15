@@ -12,12 +12,17 @@ public class DataManager : Singleton<DataManager>
 	public int score { get; private set; } = 0;
 	public int bestScore { get; private set; } = 0;
 
-
+	public void InitScore() => score = 0;
 	public void AddScore(int num)
 	{
 		score += num;
 		onUpdateScore?.Invoke();
 	}
+	public void UpdateBestScore()
+	{
+		bestScore = score;
+	}
+
 	public Color GetColor()
 	{
 		return colors[Random.Range(0, colors.Count)];

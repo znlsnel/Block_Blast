@@ -1,16 +1,30 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameOver : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] Text gameOverText;
+    [SerializeField] Text scoreText;
+    [SerializeField] GameObject bestScoreEffect;
 
-    // Update is called once per frame
-    void Update()
+	private void Awake()
+	{
+        bestScoreEffect.SetActive(false);
+	}
+	void Start()
     {
-        
-    }
+        DataManager db = DataManager.Instance;
+        scoreText.text = db.score.ToString();
+
+        if (db.score > db.bestScore)
+        { 
+            gameOverText.text = "BEST SCORE ! !";
+            db.UpdateBestScore();
+            bestScoreEffect.SetActive(true);
+		}
+		else
+			gameOverText.text = "GAME OVER . .";
+
+	}
+
 }
