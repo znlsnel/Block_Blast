@@ -45,9 +45,6 @@ public class Tile : MonoBehaviour
 
 	public void GameOver(Color color)
 	{
-		if (isActiveTile == false)
-			return;
-
 		PushTile();
 		SetColor(color);
 	}

@@ -71,7 +71,7 @@ public class BlockSpawner : MonoBehaviour
 		if (flag == false)
 		{
 			Debug.Log("게임 실패!");
-			
+			Board.instance.GameOver();
 		}
 	}
 

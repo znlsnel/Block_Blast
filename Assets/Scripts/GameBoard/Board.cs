@@ -268,18 +268,22 @@ public class Board : MonoBehaviour
 		StartCoroutine(RunGameOver());
 	}
 
-	int[] dy = { -1, -1, 0 };
-	int[] dx = { 1, 0, 1 };
+	int[] dy = { -1, 0, -1 };
+	int[] dx = { 0, 1, 1}; 
 	IEnumerator RunGameOver()
 	{
+		
+
+		yield return new WaitForSeconds(2.0f);
 		Color color = DataManager.Instance.GetGameOverColor();
 
 		HashSet<(int, int)> visited = new HashSet<(int, int)>();
 		Queue<(int, int)> q = new Queue<(int, int)> ();
-
+		 
 		q.Enqueue((tileSize - 1, 0));
 		visited.Add((tileSize - 1, 0));
 
+		 
 		while (q.Count > 0)
 		{
 			var (curY, curX) = q.Dequeue();
@@ -289,13 +293,14 @@ public class Board : MonoBehaviour
 			{
 				var (nxtY, nxtX) = (curY + dy[i], curX + dx[i]);
 
-				if (nxtY < 0 || nxtX < 0 || nxtX >= dy.GetLength(1) || visited.Contains((nxtY, nxtX)))
+				if (nxtY < 0 || nxtX < 0 || nxtX >= tiles.GetLength(1) || visited.Contains((nxtY, nxtX)))
 					continue;
 
 				q.Enqueue((nxtY, nxtX));
+				visited.Add((nxtY, nxtX));
 			}
 
-			yield return new WaitForSeconds(0.2f);
+			yield return new WaitForSeconds(0.03f); 
 		}
 
 	}
