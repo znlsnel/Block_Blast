@@ -57,7 +57,7 @@ public class BlockSpawner : MonoBehaviour
 		CanContinueGame();
 	}
 
-	void CanContinueGame()
+	public void CanContinueGame()
 	{
 		bool flag = false;
 		foreach (Block block in myBlocks)

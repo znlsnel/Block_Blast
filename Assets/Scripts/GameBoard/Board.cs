@@ -28,7 +28,8 @@ public class Board : MonoBehaviour
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] Object gameOverScene;
 
-
+	int combo = 1;
+	int placeBlockCnt = 0;
 
 	Vector3[,] gameBoard;
 	Tile[,] tiles;
@@ -75,6 +76,18 @@ public class Board : MonoBehaviour
 			}
 		}
     }
+	int GetComboScore()
+	{
+		if (placeBlockCnt > 2)
+		{
+			combo = 1;
+			placeBlockCnt = 0;
+		}
+
+		int ret = 10 * combo++;
+		return ret;
+	}
+
 	public float GetTileSize() => length / tileSize;
 	bool isVisited(int y, int x) => tiles[y, x].isActiveTile;
 	public bool CanPlaceTile(HashSet<(int,  int)> hash)
@@ -118,7 +131,7 @@ public class Board : MonoBehaviour
 		bool ret = CanPlaceTile(out HashSet<(int, int)> hash, block);
 		if (ret) 
 		{
-			block.RelaseBlock();
+			block.RelaseBlock(); 
 
 			foreach(var pos in hash)
 			{
@@ -127,8 +140,12 @@ public class Board : MonoBehaviour
 
 				tiles[y, x].PushTile();
 				tiles[y, x].SetColor(block.blockColor);
-			} 
-			Utils.instance.SetTimer(()=> {
+				
+			}
+			DataManager.Instance.AddScore(hash.Count());
+			placeBlockCnt++;
+
+			Utils.Instance.SetTimer(()=> {
 				CheckBingo();
 				BlockSpawner.instance.UseBlock(); 
 			} 
@@ -136,6 +153,7 @@ public class Board : MonoBehaviour
 		}
 		return ret;
 	}
+
 	void CheckBingo()
 	{
 		List<int> successY = new List<int>();
@@ -173,13 +191,18 @@ public class Board : MonoBehaviour
 		}
 
 		foreach (int idx in successY)
+		{
 			for (int i = 0; i < tileSize; i++)
 				tiles[i, idx].PopTile();
-
+			DataManager.Instance.AddScore(GetComboScore());
+		}
 
 		foreach (int idx in successX)
+		{
 			for (int i = 0; i < tileSize; i++)
 				tiles[idx, i].PopTile();
+			DataManager.Instance.AddScore(GetComboScore());
+		}
 
 	}
 	void GetClosestTile(Vector3 pos, out int y, out int x)
@@ -281,8 +304,8 @@ public class Board : MonoBehaviour
 	int[] dx = { 0, 1, 1}; 
 	IEnumerator RunGameOver()
 	{
+		yield return new WaitForSeconds(2.0f);  
 		gameOverUI.SetActive(true);
-		yield return new WaitForSeconds(1.0f); 
 		Color color = DataManager.Instance.GetGameOverColor();
 
 		HashSet<(int, int)> visited = new HashSet<(int, int)>();

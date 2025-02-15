@@ -2,16 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Utils : MonoBehaviour
+public class Utils : Singleton<Utils>   
 {
-    public static Utils instance;
-    void Awake()
-    {
-        instance = this;
-
-	}
-
-  
     public void SetTimer(Action ac, float time)
     {
         StartCoroutine(Timer(ac, time));

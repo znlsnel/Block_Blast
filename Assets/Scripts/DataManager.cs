@@ -1,13 +1,23 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class DataManager : Singleton<DataManager>
 {
 	[SerializeField] List<Color> colors = new List<Color>();
 	[SerializeField] Color gameOverColor = new Color();
+	public UnityEvent onUpdateScore = new UnityEvent();
+	public int score { get; private set; } = 0;
+	public int bestScore { get; private set; } = 0;
 
+
+	public void AddScore(int num)
+	{
+		score += num;
+		onUpdateScore?.Invoke();
+	}
 	public Color GetColor()
 	{
 		return colors[Random.Range(0, colors.Count)];
