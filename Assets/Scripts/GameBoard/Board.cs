@@ -6,13 +6,13 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Unity.Notifications.iOS;
+
 using Unity.VisualScripting;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
+
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using static UnityEditor.PlayerSettings;
+
 using Object = UnityEngine.Object;
 
 public class Board : MonoBehaviour
