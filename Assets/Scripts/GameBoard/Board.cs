@@ -26,7 +26,7 @@ public class Board : MonoBehaviour
 
 	[Space(10)]
 	[SerializeField] GameObject gameOverUI;
-	[SerializeField] Object gameOverScene;
+	[SerializeField] string gameOverScene;
 
 	int combo = 1;
 	int placeBlockCnt = 0;
@@ -336,7 +336,7 @@ public class Board : MonoBehaviour
 		}
 
 		yield return new WaitForSeconds(1.0f);
-		SceneManager.LoadScene(gameOverScene.name);
+		SceneManager.LoadScene(gameOverScene);
 	}
 
 }
