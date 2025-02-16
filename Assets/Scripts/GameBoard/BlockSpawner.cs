@@ -11,10 +11,12 @@ public class BlockSpawner : MonoBehaviour
 
 	[SerializeField] List<GameObject> blocksPrefabs= new List<GameObject>();
 	[SerializeField] int blockCount = 3;
+	[SerializeField] float spawnSize = 0.2f;
 
 	List<Vector3> points = new List<Vector3>();
 	HashSet<Block> myBlocks = new HashSet<Block>();	
 	float width = 3.8f;
+	
 
 	private void Awake()
 	{
@@ -38,7 +40,7 @@ public class BlockSpawner : MonoBehaviour
 		{
 			var go = Instantiate(blocksPrefabs[UnityEngine.Random.Range(0, blocksPrefabs.Count)]);
 			go.transform.position = pos;
-			go.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+			go.transform.localScale = new Vector3(spawnSize, spawnSize, spawnSize);
 
 			Block block = go.GetComponent<Block>();
 			myBlocks.Add(block);

@@ -1,14 +1,17 @@
 using NUnit.Framework.Constraints;
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
-    Animator anim;
-    [SerializeField] SpriteRenderer sr;
+    Animator anim; 
+    [SerializeField] Canvas canvas;
+    [SerializeField] Image sr;
 
-    public bool isActiveTile = false;
+    [NonSerialized] public bool isActiveTile = false;
 
     void Awake()
     {
@@ -16,7 +19,10 @@ public class Tile : MonoBehaviour
 		isActiveTile = false;
 	}
 	public void HideTile() => gameObject.SetActive(false);
-	public void IncreaseSortingOrder() => sr.sortingOrder++;
+	public void IncreaseSortingOrder()
+	{
+		 	canvas.sortingOrder++;
+	}
 	public void SetColor(Color color) => sr.color = color;
 	 
 	public void PopTile()
