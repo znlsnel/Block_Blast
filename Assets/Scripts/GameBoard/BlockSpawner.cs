@@ -15,7 +15,7 @@ public class BlockSpawner : MonoBehaviour
 
 	List<Vector3> points = new List<Vector3>();
 	HashSet<Block> myBlocks = new HashSet<Block>();	
-	float width = 3.8f;
+	float width = 6f;
 	
 
 	private void Awake()

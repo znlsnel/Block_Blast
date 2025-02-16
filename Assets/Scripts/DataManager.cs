@@ -18,10 +18,7 @@ public class DataManager : Singleton<DataManager>
 		score += num;
 		onUpdateScore?.Invoke();
 	}
-	public void UpdateBestScore()
-	{
-		bestScore = score;
-	}
+	public void UpdateBestScore() => bestScore = score;
 
 	public Color GetColor()
 	{
