@@ -42,9 +42,9 @@ public class Tile : MonoBehaviour
 	{
 		if (isActiveTile)
 			return;
-
+		 
 		Color temp = sr.color;
-		temp.a = 0.3f;
+		temp.a = 0.6f;
 		sr.color = temp;
 		gameObject.SetActive(fade); 
 	}

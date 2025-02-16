@@ -58,6 +58,7 @@ public class InputManager : MonoBehaviour
 		{
 			Vector3 pos = handPos;
 			pos.z = 0;
+			pos.y += 1.3f;
 			myBlock.transform.position = pos;
 			
 		}
