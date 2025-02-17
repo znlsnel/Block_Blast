@@ -12,7 +12,7 @@ public class Tile : MonoBehaviour
     [SerializeField] Image sr;
 
     [NonSerialized] public bool isActiveTile = false;
-
+	Color myColor;
     void Awake()
     {
 		anim = GetComponent<Animator>();
@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour
 		 	canvas.sortingOrder++;
 	}
 	public void SetColor(Color color) => sr.color = color;
-	 
+
 	public void PopTile()
     {
 		isActiveTile = false;

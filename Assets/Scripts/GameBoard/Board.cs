@@ -160,37 +160,7 @@ public class Board : MonoBehaviour
 		List<int> successY = new List<int>();
 		List<int> successX = new List<int>();
 
-		for (int y = 0; y < tiles.GetLength(0); y++)
-		{
-			bool flag = true;
-			for (int x = 0; x < tiles.GetLength(1); x++)
-			{
-				if (isVisited(y, x) == false)
-				{
-					flag = false;
-					break;
-				}
-			}
-			if (flag)
-				successX.Add(y);
-		}
-
-
-		for (int x = 0; x < tiles.GetLength(1); x++)
-		{
-			bool flag = true;
-			for (int y = 0; y < tiles.GetLength(0); y++)
-			{
-				if (isVisited(y, x) == false)
-				{
-					flag = false;
-					break;
-				}
-			}
-			if (flag)
-				successY.Add(x);
-		}
-
+		GetBingo(ref successY, ref successX);
 		foreach (int idx in successY)
 		{
 			for (int i = 0; i < tileSize; i++)
@@ -204,8 +174,44 @@ public class Board : MonoBehaviour
 				tiles[idx, i].PopTile();
 			DataManager.Instance.AddScore(GetComboScore());
 		}
-
 	}
+
+	void GetBingo(ref List<int> bingoY, ref List<int> bingoX, HashSet<(int, int)> hash = null)
+	{
+		for (int y = 0; y < tiles.GetLength(0); y++)
+		{
+			bool flag = true;
+			for (int x = 0; x < tiles.GetLength(1); x++)
+			{
+				if (isVisited(y, x) == false && ( hash == null || hash.Contains((y, x)) == false))
+				{
+					flag = false;
+					break;
+				}
+			}
+			if (flag)
+				bingoX.Add(y);
+		}
+
+
+		for (int x = 0; x < tiles.GetLength(1); x++)
+		{
+			bool flag = true;
+			for (int y = 0; y < tiles.GetLength(0); y++)
+			{
+				if (isVisited(y, x) == false && (hash == null || hash.Contains((y, x)) == false))
+				{
+					flag = false;
+					break;
+				}
+			}
+			if (flag)
+				bingoY.Add(x);
+		}
+	}
+
+
+
 	void GetClosestTile(Vector3 pos, out int y, out int x)
 	{
 		float size = GetTileSize();
@@ -233,6 +239,23 @@ public class Board : MonoBehaviour
 			tiles[y, x].SetColor(hoveringBlock.blockColor);
 			tiles[y, x].FadeMode();
 		}
+
+		List<int> successY = new List<int>();
+		List<int> successX = new List<int>();
+		GetBingo(ref successY, ref successX,  hash);
+
+		foreach (int idx in successY)
+		{
+			for (int i = 0; i < tileSize; i++)
+				tiles[i, idx].SetColor(hoveringBlock.blockColor);
+		}
+
+		foreach (int idx in successX)
+		{
+			for (int i = 0; i < tileSize; i++)
+				tiles[idx, i].SetColor(hoveringBlock.blockColor);
+		}
+
 	}
 
 	public void SetHoverBlock(Block block)
@@ -305,7 +328,7 @@ public class Board : MonoBehaviour
 	int[] dx = { 0, 1, 1}; 
 	IEnumerator RunGameOver()
 	{
-		yield return new WaitForSeconds(2.0f);  
+		yield return new WaitForSeconds(1.0f);  
 		gameOverUI.SetActive(true);
 		Color color = DataManager.Instance.GetGameOverColor();
 

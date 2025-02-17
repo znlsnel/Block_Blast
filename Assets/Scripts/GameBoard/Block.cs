@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
+using Color = UnityEngine.Color;
 
 public class Block : MonoBehaviour
 {
@@ -79,7 +80,18 @@ public class Block : MonoBehaviour
 			piece.GetComponent<Tile>().SetColor(blockColor);
 	}
 
-	// (-x, y)
+	public void SetLockColor()
+	{
+		Color color = DataManager.Instance.GetGameOverColor();
+		foreach (GameObject piece in tiles)
+			piece.GetComponent<Tile>().SetColor(color);
+	}
+
+	public void SetOriginColor()
+	{
+		foreach (GameObject piece in tiles)
+			piece.GetComponent<Tile>().SetColor(blockColor);
+	}
 
 	public void RelaseBlock()
 	{

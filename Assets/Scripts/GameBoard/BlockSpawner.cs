@@ -67,9 +67,13 @@ public class BlockSpawner : MonoBehaviour
 			if (block.CanPlaceTileOnBoard())
 			{
 				flag = true;
-				break;
+				block.SetOriginColor();
 			}
+			else
+				block.SetLockColor();
+			
 		}
+
 		if (flag == false)
 		{
 			Debug.Log("게임 실패!");
