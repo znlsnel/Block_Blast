@@ -8,15 +8,21 @@ public class GameOver : MonoBehaviour
     [SerializeField] Text scoreText;
     [SerializeField] GameObject bestScoreEffect;
 
+    [Space(10)]
+    [SerializeField] AudioClip _countingNumSound;
+
+    AudioSource _audioSource;
 	private void Awake()
 	{
         bestScoreEffect.SetActive(false);
+		_audioSource = GetComponent<AudioSource>();
 	}
 	void Start()
-    { 
-        
+    {
+		_audioSource.PlayOneShot(_countingNumSound);
 
-        StartCoroutine(UpdateScore());
+
+		StartCoroutine(UpdateScore());
 	}
     
     void AE_OpenUI()
@@ -35,7 +41,7 @@ public class GameOver : MonoBehaviour
     IEnumerator UpdateScore()
     {
         DataManager db = DataManager.Instance;
-        float time = 1.0f ;
+        float time = 1.5f ;
 
         float score = 0;
         int target = db.score;

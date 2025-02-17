@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -28,15 +29,22 @@ public class Board : MonoBehaviour
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] string gameOverScene;
 
+	[Space(10)]
+	[SerializeField] AudioClip _pushSound;
+	[SerializeField] AudioClip _matchSound;
+	[SerializeField] AudioClip _gameOverSound;
+
 	int combo = 1;
 	int placeBlockCnt = 0;
 
 	Vector3[,] gameBoard;
 	Tile[,] tiles;
 	Block hoveringBlock;
+	AudioSource audioSource;
 
 	private void Awake()
 	{
+		audioSource = GetComponent<AudioSource>();	
 		gameOverUI.SetActive(false);
 		gameBoard = new Vector3[tileSize, tileSize];
 		tiles = new Tile[tileSize, tileSize];
@@ -145,7 +153,7 @@ public class Board : MonoBehaviour
 			}
 			DataManager.Instance.AddScore(hash.Count());
 			placeBlockCnt++;
-
+			audioSource.PlayOneShot(_pushSound);
 			Utils.Instance.SetTimer(()=> {
 				CheckBingo();
 				BlockSpawner.instance.UseBlock(); 
@@ -174,6 +182,10 @@ public class Board : MonoBehaviour
 				tiles[idx, i].PopTile();
 			DataManager.Instance.AddScore(GetComboScore());
 		}
+
+		if (successX.Count() > 0 || successY.Count() > 0)
+			audioSource.PlayOneShot(_matchSound);
+
 	}
 
 	void GetBingo(ref List<int> bingoY, ref List<int> bingoX, HashSet<(int, int)> hash = null)
@@ -329,6 +341,7 @@ public class Board : MonoBehaviour
 	IEnumerator RunGameOver()
 	{
 		yield return new WaitForSeconds(1.0f);  
+		audioSource.PlayOneShot(_gameOverSound);
 		gameOverUI.SetActive(true);
 		Color color = DataManager.Instance.GetGameOverColor();
 
