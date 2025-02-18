@@ -831,7 +831,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544fa52528804e54dab9de379f360e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scene: {fileID: 102900000, guid: 77374e000d495ef46ab64853a0cdb939, type: 3}
   name: Play
 --- !u!1 &912196270
 GameObject:
@@ -1011,7 +1010,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 41fb928d4125d7c468e4e42948097782, type: 3}
+    m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
     m_FontSize: 135
     m_FontStyle: 1
     m_BestFit: 0
