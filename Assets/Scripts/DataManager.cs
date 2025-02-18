@@ -9,8 +9,8 @@ public class DataManager : Singleton<DataManager>
 	[SerializeField] List<Color> colors = new List<Color>();
 	[SerializeField] Color gameOverColor = new Color();
 	public UnityEvent onUpdateScore = new UnityEvent();
-	public int score { get; private set; } = 0;
-	public int bestScore { get; private set; } = 0;
+	public int score { get; set; } = 0;
+	public int bestScore { get; set; } = 0;
 
 	public void InitScore() => score = 0;
 	public void AddScore(int num)
