@@ -28,11 +28,12 @@ public class GameOver : MonoBehaviour
     void AE_OpenUI()
     {
 		DataManager db = DataManager.Instance;
-		if (db.score > db.bestScore)
+		if (db.score > db.bestScore) 
 		{
 			gameOverText.text = "BEST SCORE ! !"; 
 			db.UpdateBestScore();
-			bestScoreEffect.SetActive(true); 
+			bestScoreEffect.SetActive(true);
+			GPGSManager.Instance.AddScoreToLeaderboard(db.bestScore);
 		}
 		else
 			gameOverText.text = "GAME OVER . .";
@@ -58,4 +59,8 @@ public class GameOver : MonoBehaviour
 		scoreText.text = target.ToString();
 	}
 
+	public void OpenLeaderBoad()
+	{
+		GPGSManager.Instance.ShowLeaderboard();
+	}
 }
