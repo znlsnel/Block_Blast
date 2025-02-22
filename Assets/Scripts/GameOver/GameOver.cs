@@ -30,13 +30,13 @@ public class GameOver : MonoBehaviour
 		DataManager db = DataManager.Instance;
 		if (db.score > db.bestScore) 
 		{
-			gameOverText.text = "BEST SCORE ! !"; 
+			gameOverText.text = "BEST SCORE"; 
 			db.UpdateBestScore();
 			bestScoreEffect.SetActive(true);
 			GPGSManager.Instance.AddScoreToLeaderboard(db.bestScore);
 		}
 		else
-			gameOverText.text = "GAME OVER . .";
+			gameOverText.text = "GAME OVER";
 	}
 
     IEnumerator UpdateScore()

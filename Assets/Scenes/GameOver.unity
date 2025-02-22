@@ -209,6 +209,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1926093056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8266536471331882241, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+  m_PrefabInstance: {fileID: 1791297585313906551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1926093057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926093056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.21960784}
+  m_EffectDistance: {x: 0, y: -5.74}
+  m_UseGraphicAlpha: 1
 --- !u!1 &2098938270
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +374,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 400338024021016207, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400338024021016207, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8406978013554369639, guid: 1a8266829da224852aa57ef1f7085be0, type: 3}
+    - target: {fileID: 1905100857336818496, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      propertyPath: m_Text
+      value: BEST SCORE
+      objectReference: {fileID: 0}
+    - target: {fileID: 1905100857336818496, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 4ec97b8fea68bd144a1413dc60231502, type: 3}
+    - target: {fileID: 1905100857336818496, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1905100857336818496, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      propertyPath: m_FontData.m_FontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2439997364698407359, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
       propertyPath: m_SizeDelta.y
       value: 128.86
@@ -469,6 +513,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8764473449600816044, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1791297585313906553}
+    - targetCorrespondingSourceObject: {fileID: 8266536471331882241, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1926093057}
     - targetCorrespondingSourceObject: {fileID: 7550116861865571401, guid: 1f7fe650c15bf074a8c45860ca8a87b5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1791297585313906556}

@@ -23,7 +23,20 @@ public class Tile : MonoBehaviour
 	{
 		 	canvas.sortingOrder++;
 	}
-	public void SetColor(Color color) => sr.color = color;
+	public void SetColor(Color color)
+	{
+		myColor = color;
+		sr.color = color;
+	}
+	public void SetTempColor(Color color)
+	{
+		sr.color = color;
+
+	}
+	public void SetOriginColor()
+	{
+		sr.color = myColor;
+	}
 
 	public void PopTile()
     {

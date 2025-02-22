@@ -244,8 +244,9 @@ public class Board : MonoBehaviour
 		}
 	}
 
-	public void Hovering(HashSet<(int, int)> hash)
+	public HashSet<(int, int)> Hovering(HashSet<(int, int)> hash)
 	{
+		HashSet < (int, int) > ret = new HashSet<(int, int)>();
 		foreach (var (y, x) in hash)
 		{
 			tiles[y, x].SetColor(hoveringBlock.blockColor);
@@ -259,16 +260,23 @@ public class Board : MonoBehaviour
 		foreach (int idx in successY)
 		{
 			for (int i = 0; i < tileSize; i++)
-				tiles[i, idx].SetColor(hoveringBlock.blockColor);
+			{
+				tiles[i, idx].SetTempColor(hoveringBlock.blockColor);
+				ret.Add((i, idx));
+			}
 		}
 
 		foreach (int idx in successX)
 		{
 			for (int i = 0; i < tileSize; i++)
-				tiles[idx, i].SetColor(hoveringBlock.blockColor);
+			{
+				ret.Add((idx, i));
+				tiles[idx, i].SetTempColor(hoveringBlock.blockColor);
+			}
 		}
 
-	}
+		return ret;
+	} 
 
 	public void SetHoverBlock(Block block)
 	{
@@ -277,6 +285,7 @@ public class Board : MonoBehaviour
 
 	IEnumerator CheckHover()
 	{
+		HashSet<(int, int)> chgBlocks = null;
 		HashSet<(int, int)> prevIdxs = null; 
 		var (prevY, prevX) = (-10, -10);
 
@@ -289,7 +298,14 @@ public class Board : MonoBehaviour
 
 				if (prevY != curY || prevX != curX)
 				{
-					Hovering(curIdxs); 
+					if (chgBlocks != null)
+					{
+						foreach (var pos in chgBlocks)
+							tiles[pos.Item1, pos.Item2].SetOriginColor();
+
+					}
+
+					chgBlocks = Hovering(curIdxs); 
 					prevY = curY;
 					prevX = curX;
 
