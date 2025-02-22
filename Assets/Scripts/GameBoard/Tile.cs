@@ -55,7 +55,8 @@ public class Tile : MonoBehaviour
 	{
 		if (isActiveTile)
 			return;
-		 
+
+		anim.SetTrigger("idle"); 
 		Color temp = sr.color;
 		temp.a = 0.6f;
 		sr.color = temp;

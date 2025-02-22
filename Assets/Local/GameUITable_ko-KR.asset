@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 20689469440
-    m_Localized: "\uD50C\uB808\uC774"
+    m_Localized: Play
     m_Metadata:
       m_Items: []
   - m_Id: 306808111104
@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9426407800832
-    m_Localized: "\uB9AC\uB354\uBCF4\uB4DC"
+    m_Localized: Leader Board
     m_Metadata:
       m_Items: []
   references:
