@@ -11,6 +11,7 @@ public class DataManager : Singleton<DataManager>
 	public UnityEvent onUpdateScore = new UnityEvent();
 	public int score { get; set; } = 0;
 	public int bestScore { get; set; } = 0;
+	public int retryCnt = 0;
 
 	public void InitScore() => score = 0;
 	public void AddScore(int num)

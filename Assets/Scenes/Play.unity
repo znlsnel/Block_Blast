@@ -1067,7 +1067,6 @@ GameObject:
   - component: {fileID: 861046873}
   - component: {fileID: 861046872}
   - component: {fileID: 861046871}
-  - component: {fileID: 861046874}
   m_Layer: 5
   m_Name: Home
   m_TagString: Untagged
@@ -1138,9 +1137,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 861046874}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadScene
+      - m_Target: {fileID: 2107930064}
+        m_TargetAssemblyTypeName: FunctionUI, Assembly-CSharp
+        m_MethodName: HomeButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1188,19 +1187,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861046869}
   m_CullTransparentMesh: 1
---- !u!114 &861046874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861046869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 544fa52528804e54dab9de379f360e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Home
 --- !u!1 &867159586
 GameObject:
   m_ObjectHideFlags: 0
@@ -1938,7 +1924,6 @@ GameObject:
   - component: {fileID: 1339444436}
   - component: {fileID: 1339444435}
   - component: {fileID: 1339444434}
-  - component: {fileID: 1339444437}
   m_Layer: 5
   m_Name: Retry
   m_TagString: Untagged
@@ -2009,9 +1994,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1339444437}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: LoadScene
+      - m_Target: {fileID: 2107930064}
+        m_TargetAssemblyTypeName: FunctionUI, Assembly-CSharp
+        m_MethodName: RetryButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2059,19 +2044,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1339444432}
   m_CullTransparentMesh: 1
---- !u!114 &1339444437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339444432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 544fa52528804e54dab9de379f360e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Play
 --- !u!1 &1357113697
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,6 +3259,7 @@ GameObject:
   - component: {fileID: 2107930062}
   - component: {fileID: 2107930061}
   - component: {fileID: 2107930060}
+  - component: {fileID: 2107930064}
   m_Layer: 5
   m_Name: Setting
   m_TagString: Untagged
@@ -3378,6 +3351,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 453, y: 805}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2107930064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107930059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2facd048b7333344bb9b207fd02f7ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

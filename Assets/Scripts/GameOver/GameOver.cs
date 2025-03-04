@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameOver : MonoBehaviour
@@ -20,8 +21,6 @@ public class GameOver : MonoBehaviour
 	void Start()
     {
 		_audioSource.PlayOneShot(_countingNumSound);
-
-
 		StartCoroutine(UpdateScore());
 	}
     
@@ -62,5 +61,13 @@ public class GameOver : MonoBehaviour
 	public void OpenLeaderBoad()
 	{
 		GPGSManager.Instance.ShowLeaderboard();
+	}
+
+	public void ReStart()
+	{
+		AdManager.Instance.rewardedAd.ShowAd(() =>
+		{
+			SceneManager.LoadScene("Play");
+		}); 
 	}
 }

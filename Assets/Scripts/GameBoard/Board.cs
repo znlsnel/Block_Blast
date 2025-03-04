@@ -11,6 +11,7 @@ using Unity.VisualScripting;
 
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +34,7 @@ public class Board : MonoBehaviour
 	[SerializeField] AudioClip _pushSound;
 	[SerializeField] AudioClip _matchSound;
 	[SerializeField] AudioClip _gameOverSound;
+	[NonSerialized] public UnityEvent onGameOver = new UnityEvent();
 
 	int combo = 1;
 	int placeBlockCnt = 0;
@@ -388,6 +390,7 @@ public class Board : MonoBehaviour
 		}
 
 		yield return new WaitForSeconds(1.0f);
+		
 		SceneManager.LoadScene(gameOverScene);
 	}
 
