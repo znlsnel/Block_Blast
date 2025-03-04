@@ -1,6 +1,8 @@
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class GPGSManager : Singleton<GPGSManager>
 {
@@ -25,6 +27,13 @@ public class GPGSManager : Singleton<GPGSManager>
 			Debug.Log("User Name: " + userName);
 			LoadMyScore();
 			// Continue with Play Games Services
+			SystemLanguage systemLanguage = Application.systemLanguage;
+			Locale locale = LocalizationSettings.AvailableLocales.GetLocale(systemLanguage);
+			if (locale != null)
+			{
+				LocalizationSettings.SelectedLocale = locale;
+			} 
+
 		}
 		else
 		{
